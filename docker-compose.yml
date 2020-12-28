@@ -25,6 +25,7 @@ services:
       TZ: Asia/Tokyo
     volumes:
       - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -36,3 +37,7 @@ services:
       - 10381:80
     volumes:
       - ./phpmyadmin/sessions:/sessions
+  memcached:
+    image: memcached
+    ports:
+      - 11211:11211

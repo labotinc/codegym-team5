@@ -38,11 +38,12 @@
    - 下記のようなメッセージが出たら成功
 
      ```
-     Creating network "quelcode-cakephp_default" with the default driver
-     Creating quelcode-cakephp_phpmyadmin_1 ... done
-     Creating quelcode-cakephp_nginx_1      ... done
-     Creating quelcode-cakephp_mysql_1      ... done
-     Creating quelcode-cakephp_php_1        ... done
+     Creating network "codegym-team5_default" with the default driver
+     Creating codegym-team5_phpmyadmin_1 ... done
+     Creating codegym-team5_nginx_1      ... done
+     Creating codegym-team5_php_1        ... done
+     Creating codegym-team5_memcached_1  ... done
+     Creating codegym-team5_mysql_1      ... done
      ```
 
 1. 起動中の php コンテナの bash を実行する
@@ -137,4 +138,29 @@
   + root  /var/www/html/mylaravelapp/public;
     index index.php index.html;
     ...
+  ```
+
+## 既にdocker-composeをインストールしており、memcachedへの変更のみ行いたい場合
+- docker-compose downしてある状態で以下のコマンドを実行する
+
+  ```
+  docker-compose build --no-cache php
+  ```
+
+- 以下のような表示がされたら完了
+
+  ```
+  Successfully built cbe38806e580
+  Successfully tagged codegym-team5_php:latest
+  ```
+
+- あとは通常通りdocker-compose up -dを行うと以下のように表示される
+
+  ```
+  Creating network "codegym-team5_default" with the default driver
+  Creating codegym-team5_memcached_1  ... done //新しくmemcachedが追加されている
+  Creating codegym-team5_php_1        ... done
+  Creating codegym-team5_phpmyadmin_1 ... done
+  Creating codegym-team5_nginx_1      ... done
+  Creating codegym-team5_mysql_1      ... done
   ```

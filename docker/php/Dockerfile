@@ -18,6 +18,9 @@ RUN apt-get update \
   && apt-get install -y vim \
   && apt-get install -y nodejs \
   && apt-get install -y libicu-dev \
+  && apt-get install -y libmemcached-dev zlib1g-dev \
+  && pecl install memcached \
+  && docker-php-ext-enable memcached \
   && docker-php-ext-install pdo_mysql intl mbstring
 
 # ユーザを作成する
