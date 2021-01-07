@@ -43,7 +43,7 @@ class CreateSeatReservations extends AbstractMigration
             'null' => false,
         ]);
         $table->addColumn('updated_at', 'datetime', [
-            'default' => null,
+            'default' => 'CURRENT_TIMESTAMP',
             'null' => false,
         ]);
         $table->create();

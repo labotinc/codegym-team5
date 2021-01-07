@@ -40,7 +40,7 @@ class CreateDiscounts extends AbstractMigration
         ]);
         $table->addColumn('finished_at', 'datetime', [
             'default' => null,
-            'null' => false,
+            'null' => true,
         ]);
         $table->addColumn('is_deleted', 'boolean', [
             'default' => 0,
@@ -51,7 +51,7 @@ class CreateDiscounts extends AbstractMigration
             'null' => false,
         ]);
         $table->addColumn('updated_at', 'datetime', [
-            'default' => null,
+            'default' => 'CURRENT_TIMESTAMP',
             'null' => false,
         ]);
         $table->create();

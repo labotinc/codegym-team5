@@ -30,7 +30,7 @@ class CreateMembers extends AbstractMigration
             'null' => false,
         ]);
         $table->addColumn('is_deleted', 'boolean', [
-            'default' => null,
+            'default' => 0,
             'null' => false,
         ]);
         $table->addColumn('is_provisional', 'boolean', [
@@ -42,7 +42,7 @@ class CreateMembers extends AbstractMigration
             'null' => false,
         ]);
         $table->addColumn('updated_at', 'datetime', [
-            'default' => null,
+            'default' => 'CURRENT_TIMESTAMP',
             'null' => false,
         ]);
         $table->create();
