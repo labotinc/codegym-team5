@@ -40,13 +40,7 @@ class MembersTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('Creditcards', [
-            'foreignKey' => 'member_id',
-        ]);
         $this->hasMany('Payments', [
-            'foreignKey' => 'member_id',
-        ]);
-        $this->hasMany('Points', [
             'foreignKey' => 'member_id',
         ]);
         $this->hasMany('ReservationDetails', [

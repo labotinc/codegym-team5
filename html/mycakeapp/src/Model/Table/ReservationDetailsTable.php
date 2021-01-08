@@ -39,6 +39,10 @@ class ReservationDetailsTable extends Table
         $this->setDisplayField('member_id');
         $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number']);
 
+        $this->belongsTo('SeatReservations', [
+            'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
+            'joinType' => 'INNER',
+        ]);
         $this->belongsTo('Members', [
             'foreignKey' => 'member_id',
             'joinType' => 'INNER',
@@ -53,6 +57,10 @@ class ReservationDetailsTable extends Table
         ]);
         $this->belongsTo('Discounts', [
             'foreignKey' => 'discount_id',
+            'joinType' => 'INNER',
+        ]);
+        $this->belongsTo('Payments', [
+            'foreignKey' => ['member_id', 'discount_id'],
             'joinType' => 'INNER',
         ]);
     }

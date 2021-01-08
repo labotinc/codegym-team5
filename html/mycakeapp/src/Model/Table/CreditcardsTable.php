@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -37,10 +38,6 @@ class CreditcardsTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Members', [
-            'foreignKey' => 'member_id',
-            'joinType' => 'INNER',
-        ]);
         $this->hasMany('Payments', [
             'foreignKey' => 'creditcard_id',
         ]);

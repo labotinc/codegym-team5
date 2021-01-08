@@ -37,12 +37,8 @@ class PointsTable extends Table
         $this->setDisplayField('member_id');
         $this->setPrimaryKey(['member_id', 'schedule_id']);
 
-        $this->belongsTo('Members', [
-            'foreignKey' => 'member_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->belongsTo('Schedules', [
-            'foreignKey' => 'schedule_id',
+        $this->belongsTo('Payments', [
+            'foreignKey' => ['member_id', 'schedule_id'],
             'joinType' => 'INNER',
         ]);
     }

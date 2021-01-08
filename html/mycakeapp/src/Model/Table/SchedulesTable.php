@@ -52,9 +52,6 @@ class SchedulesTable extends Table
         $this->hasMany('Payments', [
             'foreignKey' => 'schedule_id',
         ]);
-        $this->hasMany('Points', [
-            'foreignKey' => 'schedule_id',
-        ]);
         $this->hasMany('ReservationDetails', [
             'foreignKey' => 'schedule_id',
         ]);
