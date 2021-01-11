@@ -49,6 +49,9 @@ class MembersTable extends Table
         $this->hasMany('SeatReservations', [
             'foreignKey' => 'member_id',
         ]);
+        $this->hasMany('Creditcards', [
+            'foreignKey' => 'member_id',
+        ]);
     }
 
     /**
