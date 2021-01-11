@@ -39,11 +39,12 @@ class CreateCreditcards extends AbstractMigration
             'null' => false,
         ]);
         $table->addColumn('created_at', 'datetime', [
-            'default' => null,
+            'default' => 'CURRENT_TIMESTAMP',
             'null' => false,
         ]);
         $table->addColumn('updated_at', 'datetime', [
             'default' => 'CURRENT_TIMESTAMP',
+            'update' => 'CURRENT_TIMESTAMP',
             'null' => false,
         ]);
         $table->create();
