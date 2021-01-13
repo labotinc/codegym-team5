@@ -46,7 +46,7 @@ class SeatReservationsTable extends Table
             'joinType' => 'INNER',
         ]);
         $this->belongsTo('Payments', [
-            'foreignKey' => ['member_id', 'discount_id'],
+            'foreignKey' => ['member_id', 'schedule_id'],
             'joinType' => 'INNER',
         ]);
         $this->hasOne('ReservationDetail', [
