@@ -17,8 +17,13 @@ class MainController extends AppController
     $this->loadModel('Discounts');
   }
 
-  public function movieSchedule()
+  public function schedule($id = null)
   {
+    if ($id) { //予約購入ボタンを押した場合
+      session_start();
+      $_SESSION['schedule_id'] = $id;
+      return $this->redirect(['controller' => 'reserves', 'action' => 'seat']);
+    }
     $week = ['日', '月', '火', '水', '木', '金', '土'];
     $today = Time::now();
     //指定した日(今は$today)が映画の上映期間内で、かつ指定した日の上映スケジュールを抽出
