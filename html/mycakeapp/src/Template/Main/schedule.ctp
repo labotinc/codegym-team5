@@ -28,7 +28,7 @@
                 <p>〜</p>
                 <p><?= h(date('G:i', strtotime('+' . $movie->screening_time . 'minute', strtotime($schedule->start_date)))) ?></p>
                 <?php if ($schedule->start_date > $today) : ?>
-                  <p><a href="#">予約購入</a></p>
+                  <p><a href="<?= $this->Url->build(['action' => 'schedule', $schedule->id]) ?>">予約購入</a></p>
                 <?php elseif ($schedule->start_date <= $today) : ?>
                   <p>購入不可</p>
                 <?php endif; ?>
