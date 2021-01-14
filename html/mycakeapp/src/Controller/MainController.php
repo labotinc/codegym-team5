@@ -22,7 +22,7 @@ class MainController extends AppController
   public function schedule()
   {
     $week = ['日', '月', '火', '水', '木', '金', '土'];
-    $today = Time::now(); 
+    $today = Time::now();
     for ($i = 0; $i < 7; $i++) {
       $date = Time::now();
       $dates[$i] = $date->addDays($i);
@@ -34,8 +34,9 @@ class MainController extends AppController
       ->order(['Movies.started_at' => 'desc'])
       ->contain('Schedules', function ($q) use ($today) {
         return $q->where(['Schedules.start_date >=' => $today->format('Y-m-d 00:00:00')])
-        ->andWhere(['Schedules.start_date <=' => $today->format('Y-m-d 23:59:59')])
-        ->andWhere(['Schedules.is_deleted' => 0])->andWhere('Schedules.id IS NOT NULL');
+          ->andWhere(['Schedules.start_date <=' => $today->format('Y-m-d 23:59:59')])
+          ->andWhere(['Schedules.is_deleted' => 0])
+          ->order(['Schedules.start_date' => 'asc']);
       });
     $this->set(compact('dates', 'week', 'movies', 'today'));
   }
