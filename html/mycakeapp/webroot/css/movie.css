@@ -1,0 +1,190 @@
+/* color */
+.back-orange {
+    background-color: #f5ae0b;
+}
+.back-gray {
+    background-color: #00000014;
+}
+header,
+footer {
+    background-color: #262626;
+}
+.title,
+div[class^="frame"],
+.back-gray {
+    color: #707070;
+}
+header a,
+footer a,
+.back-orange {
+    color: #ffffff;
+}
+
+/* button */
+button {
+    display: block;
+    font-size: 16px;
+    box-shadow: 0px 2px 2px #00000015;
+    border: none;
+    height: 48px;
+    letter-spacing: 0.44px;
+}
+/* 幅いっぱいのボタン */
+.normal-button {
+    margin: 0 auto;
+    width: 336px;
+    font-weight: bold;
+}
+/* 一番小さいボタン */
+.mini-button {
+    height: auto;
+    padding: 9px 18px;
+    font-weight: bold;
+}
+/* どっちも半分 */
+.half-button button:first-of-type {
+    margin-right: 30px;
+}
+/* 1:2のボタン */
+.division-button .back-gray {
+    width: 128px;
+}
+.division-button button:first-of-type {
+    margin-right: 16px;
+}
+/* halfとdivision共通 */
+/* 背景指定した2つのボタンを.flex.division(.halfbutton)のdivで囲う */
+.division-button,
+.half-button {
+    justify-content: center;
+}
+.half-button button,
+.division-button .back-orange {
+    width: 192px;
+}
+
+/* 共通 */
+* {
+    padding: 0;
+    margin: 0;
+}
+body * {
+    font-family: "Noto Sans JP", sans-serif;
+}
+.flex {
+    display: flex;
+}
+body {
+    min-height: 1080px;
+    min-width: 1920px;
+    background-color: #ebebeb;
+}
+a {
+    color: #262626;
+    text-decoration: none;
+}
+
+/* font */
+header * {
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1.28px;
+}
+footer * {
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 1.12px;
+}
+.title {
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: 0.89px;
+}
+button {
+    font-size: 16px;
+    letter-spacing: 0.44px;
+}
+.normal-button {
+    font-weight: bold;
+}
+.mini-button {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.25px;
+}
+
+/* header,footer共通 */
+.nav {
+    align-items: center;
+    margin: 0 auto;
+    width: 1640px;
+}
+
+/* header */
+header {
+    height: 72px;
+}
+header .nav {
+    justify-content: space-between;
+}
+header .main-nav li {
+    padding: 0 32px 0;
+}
+.user-nav li {
+    border: 1px solid #ffffff;
+    border-radius: 3px;
+    padding: 12px 30px 12px;
+    margin-left: 16px;
+}
+header .logo {
+    margin-right: 100.92px;
+}
+
+/* footer */
+footer {
+    height: 168px;
+    margin-top: auto;
+}
+footer .main-nav li:not(:first-of-type):before {
+    content: "|";
+    color: #ffffff;
+}
+footer .main-nav a {
+    padding: 0 33px 0;
+}
+footer .logo {
+    margin-right: 129.7px;
+}
+body,
+#fixed {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* content */
+/* 枠アリ */
+div[class^="frame"] {
+    margin: 0 auto;
+    width: 736px;
+    min-height: 312px;
+    background-color: #ffffff;
+}
+div[class^="frame"] .content {
+    flex-direction: column;
+    align-items: center;
+}
+.title {
+    text-align: center;
+    height: 25px;
+    margin: 83px 0 36px;
+}
+main .frame-no-title {
+    margin-top: 144px;
+}
+
+/* 枠なし */
+.no-frame {
+    margin: 88px auto 0;
+    width: 1088px;
+}
