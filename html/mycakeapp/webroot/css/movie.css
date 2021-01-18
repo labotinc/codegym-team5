@@ -127,14 +127,21 @@ header {
 header .nav {
     justify-content: space-between;
 }
-header .main-nav li {
-    padding: 0 32px 0;
+header .main-nav a {
+    padding: 28px 32px 28px;
+    display: block;
+}
+header .nav li:hover {
+    background-color: #ffffff33;
 }
 .user-nav li {
     border: 1px solid #ffffff;
     border-radius: 3px;
-    padding: 12px 30px 12px;
     margin-left: 16px;
+}
+header .user-nav a {
+    padding: 12px 30px 12px;
+    display: block;
 }
 header .logo {
     margin-right: 100.92px;
