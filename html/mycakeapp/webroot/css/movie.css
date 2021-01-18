@@ -76,7 +76,8 @@ body * {
 }
 body {
     min-height: 1080px;
-    min-width: 1920px;
+    min-width: 100%;
+    max-width: 1920px;
     background-color: #ebebeb;
 }
 a {
