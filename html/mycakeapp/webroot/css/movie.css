@@ -38,7 +38,7 @@ button {
 /* 一番小さいボタン */
 .mini-button {
     height: auto;
-    padding: 9px 18px;
+    padding: 7px 22px;
     font-weight: bold;
 }
 /* どっちも半分 */
