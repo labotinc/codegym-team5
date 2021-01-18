@@ -1,6 +1,7 @@
 <div class="nav flex">
     <div class="flex">
-        <?php echo $this->Html->image("header-logo.png", ['url' => ['controller' => 'main', 'action' => 'top'], 'class' => 'logo']); ?>
+        <!-- ↓aタグに.logoをつけるため(htmlhelperでimgタグ(optionでlink)を作成するとimgタグしかクラスが付与できない) -->
+        <a href="<?php echo $this->Url->build(['controller' => 'main', 'action' => 'top']); ?>" class="logo"><?php echo $this->Html->image("header-logo.png") ?></a>
         <ul class="main-nav flex">
             <li><?php echo $this->Html->link('トップページ', ['controller' => 'main', 'action' => 'top']); ?></li>
             <li><?php echo $this->Html->link('上映スケジュール', ['controller' => 'main', 'action' => 'schedule']); ?></li>

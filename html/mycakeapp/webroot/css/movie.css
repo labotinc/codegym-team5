@@ -145,6 +145,7 @@ header .user-nav a {
     display: block;
 }
 header .logo {
+    padding: 28px 0 28px;
     margin-right: 100.92px;
 }
 
