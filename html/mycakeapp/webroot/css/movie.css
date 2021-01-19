@@ -21,15 +21,20 @@ footer a,
 }
 
 /* button */
-button {
+/* buttonの代わりにaタグを使うときは.buttonを付ける.例)a.button.normal-button.back-orange */
+button,
+.button {
     display: block;
     font-size: 16px;
     box-shadow: 0px 2px 2px #00000015;
     border: none;
     height: 48px;
     letter-spacing: 0.44px;
+    text-align: center;
+    line-height: 45px;
 }
-button:hover {
+button:hover,
+.button:hover {
     box-shadow: 0px 3px 6px #00000033;
 }
 /* 幅いっぱいのボタン */
@@ -45,23 +50,26 @@ button:hover {
     font-weight: bold;
 }
 /* どっちも半分 */
-.half-button button:first-of-type {
+.half-button button:first-of-type,
+.half-button .button:first-of-type {
     margin-right: 30px;
 }
 /* 1:2のボタン */
 .division-button .back-gray {
     width: 128px;
 }
-.division-button button:first-of-type {
+.division-button button:first-of-type,
+.division-button .button:first-of-type {
     margin-right: 16px;
 }
 /* halfとdivision共通 */
-/* 背景指定した2つのボタンを.flex.division(.halfbutton)のdivで囲う */
+/* 背景指定した2つのボタン(aタグの時は+.button)を.flex.division(.halfbutton)のdivで囲う */
 .division-button,
 .half-button {
     justify-content: center;
 }
 .half-button button,
+.half-button .button,
 .division-button .back-orange {
     width: 192px;
 }
@@ -132,7 +140,8 @@ header .nav {
     justify-content: space-between;
 }
 .nav li,
-button {
+button,
+.button {
     transition-delay: 0.3s;
 }
 header .main-nav a {
