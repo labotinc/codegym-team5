@@ -33,8 +33,11 @@ button,
     text-align: center;
     line-height: 45px;
 }
+.button:focus,
+button:focus,
 button:hover,
 .button:hover {
+    outline: none;
     box-shadow: 0px 3px 6px #00000033;
 }
 /* 幅いっぱいのボタン */
