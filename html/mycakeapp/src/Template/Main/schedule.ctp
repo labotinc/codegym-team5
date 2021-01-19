@@ -9,7 +9,7 @@
     <?php endif; ?>
   <?php endforeach; ?>
 </ul>
-<h2><?= h($today->format('n月j日')) ?></h2>
+<h2><?= h($today->format('n月j日') . '(' . $week[$today->format('w')] . ')'); ?></h2>
 <ul>
   <?php foreach ($movies as $movie) : ?>
     <?php if (!empty($movie['schedules'])) : ?>
