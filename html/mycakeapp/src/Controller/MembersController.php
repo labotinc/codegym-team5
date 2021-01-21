@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -12,6 +13,11 @@ use App\Controller\AppController;
  */
 class MembersController extends AppController
 {
+    public function initialize()
+    {
+        $member = null;
+        $this->set('member', $member);
+    }
     /**
      * Index method
      *
@@ -102,5 +108,27 @@ class MembersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    public function create()
+    {
+        $this->viewBuilder()->setLayout('frame-title');
+        $entity = $this->Members->newEntity();
+        if ($this->request->is('post')) {
+            $entity = $this->Members->patchEntity($entity, $this->request->getData());
+            $entity["total_point"] = 0;
+            $entity["is_deleted"] = 0;
+            $entity["is_provisional"] = 1;
+            $entity["created_at"] = date("Y/m/d H:i:s");
+            $entity["updated_at"] = date("Y/m/d H:i:s");
+            if ($this->Members->save($entity)) {
+                return $this->redirect(['action' => 'saved']);
+            }
+        }
+        $title = "会員登録";
+        $this->set(compact('entity', 'title'));
+    }
+    public function saved()
+    {
+        $this->viewBuilder()->setLayout('frame-no-title');
     }
 }
