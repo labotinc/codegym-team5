@@ -117,7 +117,7 @@ class MembersController extends AppController
             $entity = $this->Members->patchEntity($entity, $this->request->getData());
             $entity["total_point"] = 0;
             $entity["is_deleted"] = 0;
-            $entity["is_provisional"] = 1;
+            $entity["is_provisional"] = 0;
             $entity["created_at"] = date("Y/m/d H:i:s");
             $entity["updated_at"] = date("Y/m/d H:i:s");
             if ($this->Members->save($entity)) {
