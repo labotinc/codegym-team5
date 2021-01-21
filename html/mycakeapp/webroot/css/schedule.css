@@ -1,0 +1,158 @@
+/* タイトル */
+.mainTitle {
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1.28px;
+  margin: 0 0 16px 0;
+}
+/* 日付選択 */
+.dateList {
+  display: flex;
+  margin: 0 0 25px 0;
+}
+.dateListContent {
+  width: 156px;
+  height: 68px;
+  padding-top: 12px;
+  text-align: center;
+  border-right: 1px solid #ffffff;
+  background-color: #7B7B7B;
+}
+.dateListContent:hover {
+  background-color: #EFA600;
+  cursor: pointer;
+}
+.active {
+  background-color: #EFA600;
+}
+.date {
+  font-size: 15px;
+  letter-spacing: 1.2px;
+  margin: 0 0 12px 0;
+  color: #ffffff;
+}
+.discountInfo {
+  font-size: 12px;
+  letter-spacing: 0.96px;
+  margin: 0;
+  color: #ffffff;
+}
+/* 上映映画 */
+.selectDate {
+  font-size: 23px;
+  font-weight: bold;
+  letter-spacing: 1.84px;
+  margin: 0 0 8px 0;
+}
+#movieList {
+  margin: 0 0 60px 0;
+}
+.movieListContent {
+  margin-bottom: 25px;
+  padding-bottom: 16px;
+  background-color: #D5D5D5;
+}
+.movieDetail {
+  height: 34px;
+  background-color: #7B7B7B;
+  padding: 14px 0 0 16px;
+}
+.movieDetailList {
+  width: 456px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.title, .screeningTime {
+  height: 100%;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  margin: 0;
+  color: #ffffff;
+}
+.finishDate {
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.96px;
+  margin: 0;
+  color: #D1D1D1;
+}
+/* 上映スケジュール */
+.movieSchedule {
+  display: flex;
+  margin-top: 16px;
+}
+.movieImage {
+  padding:0 16px;
+  margin: 0;
+}
+.movieImage img {
+  width: 120px;
+  height: 144px;
+}
+.scheduleList {
+  display: flex;
+  margin: 0;
+}
+.scheduleListContent {
+  width: 136px;
+  height: 104px;
+  padding: 24px 40px 16px 40px;
+  margin-right: 19px;
+  text-align: center;
+  background-color: #FFFFFF;
+}
+.scheduleTime {
+  margin: 0 auto 38px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  color: #707070;
+}
+.startTime,.mark {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1.36px;
+  margin: 0;
+}
+.finishTime {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1.36px;
+  margin: 0;
+}
+.reservationButton {
+  width: 136px;
+  height: 40px;
+  margin: 0 auto;
+  background-color: #D0CECE;
+}
+.reservationButton:hover {
+  background-color: #EBEBEB;
+}
+.reservationButton a {
+  display: inline-block;
+  font-size: 17px;
+  font-weight: bold;
+  width: 72px;
+  height: 17px;
+  padding: 10px 32px 12px 32px;
+  color: #707070;
+}
+.nonReservationButton {
+  display: inline-block;
+  font-size: 17px;
+  font-weight: bold;
+  width: 72px;
+  height: 17px;
+  margin: 0 auto;
+  padding: 10px 32px 12px 32px;
+  color: #D0CECE;
+  background-color: #707070;
+}
+.noSchedule {
+  width: 300px;
+  font-size: 30px;
+  margin: 50px auto 100px;
+}

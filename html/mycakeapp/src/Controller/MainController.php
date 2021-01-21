@@ -19,6 +19,7 @@ class MainController extends AppController
 
   public function schedule($id = null)
   {
+    $this->viewBuilder()->setLayout('no-frame');
     if ($id) { //予約購入ボタンを押した場合
       session_start();
       $_SESSION['schedule_id'] = $id;
@@ -38,11 +39,34 @@ class MainController extends AppController
           ->andWhere(['is_deleted' => 0])
           ->order(['start_date' => 'asc']);
       });
-    //指定した日(今は$today)から7日の日時を配列に代入
+    // 指定した日(今は$today)から7日の日時を配列に代入
     for ($i = 0; $i < 7; $i++) {
       $date = Time::now();
-      $dates[$i] = $date->addDays($i);
+      $dates[$i]['date'] = $date->addDays($i);
+      $dates[$i]['num'] = $i;
     }
     $this->set(compact('dates', 'week', 'movies', 'today'));
+  }
+
+  public function ajax()
+  {
+    if ($this->request->is('ajax')) { //ajax通信で呼び出されたら
+      $recieved_data = $this->request->query['date']; //JavaScriptから送られてきたデータを受け取る
+      $day = Time::now()->addDays($recieved_data);
+      $selectMovies = $this->Movies->find()
+        ->where(['started_at <=' => $day])
+        ->andWhere(['finished_at >=' => $day])
+        ->andWhere(['is_deleted' => 0])
+        ->order(['started_at' => 'desc'])
+        ->contain('Schedules', function ($q) use ($day) {
+          return $q->where(['start_date >=' => $day->format('Y-m-d 00:00:00')])
+            ->andWhere(['start_date <=' => $day->format('Y-m-d 23:59:59')])
+            ->andWhere(['is_deleted' => 0])
+            ->order(['start_date' => 'asc']);
+        });
+      return $this->getResponse()->withType('json')->withStringBody(json_encode(
+        $selectMovies,
+      ));
+    }
   }
 }
