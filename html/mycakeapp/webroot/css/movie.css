@@ -35,10 +35,6 @@ button,
     text-align: center;
     line-height: 45px;
 }
-button,
-a {
-    cursor: pointer;
-}
 .button:focus,
 button:focus,
 button:hover,
