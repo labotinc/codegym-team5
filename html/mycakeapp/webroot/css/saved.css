@@ -1,0 +1,14 @@
+.content h2 {
+    padding: 116px 0 24px;
+    font-size: 25px;
+    letter-spacing: 0.69px;
+    font-weight: 500;
+    color: #707070;
+}
+.content a {
+    margin: 53px auto 120px;
+    font-size: 14px;
+}
+.content p {
+    color: #707070;
+}

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -62,20 +63,53 @@ class MembersTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+        $validator->provider('custom', 'App\Model\Validation\CustomValidation');
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
-
         $validator
-            ->email('email')
+            ->email('email', false, 'メールアドレスが間違っているようです')
             ->requirePresence('email', 'create')
-            ->notEmptyString('email');
+            ->notEmptyString('email', '空白になっています')
+            ->add('email', 'ruleName', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ]);
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 100)
+            ->minLength('password', 4, 'パスワードは4文字以上13文字以下にしてください')
+            ->maxLength('password', 13, 'パスワードは4文字以上13文字以下にしてください')
             ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+            ->notEmptyString('password', '空白になっています')
+            ->add('password', 'NotBlankOnly', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ])
+            ->add('password', 'HalfSizeAlphanumericOnly', [
+                'rule' => ['HalfSizeAlphanumericOnly'],
+                'provider' => 'custom',
+                'message' => 'パスワードに使えない文字が入力されています'
+            ]);
+        $validator
+            ->scalar('rePassword')
+            ->minLength('rePassword', 4, 'パスワードは4文字以上13文字以下にしてください')
+            ->maxLength('rePassword', 13, 'パスワードは4文字以上13文字以下にしてください')
+            ->requirePresence('rePassword', 'create')
+            ->notEmptyString('rePassword', '空白になっています')
+            ->sameAs('rePassword', 'password', 'パスワードが一致していません')
+            ->add('rePassword', 'NotBlankOnly', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ])
+            ->add('rePassword', 'HalfSizeAlphanumericOnly', [
+                'rule' => ['HalfSizeAlphanumericOnly'],
+                'provider' => 'custom',
+                'message' => 'パスワードに使えない文字が入力されています'
+            ]);
 
         $validator
             ->integer('total_point')
@@ -113,7 +147,7 @@ class MembersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->isUnique(['email'], 'このメールアドレスはすでに利用されています'));
 
         return $rules;
     }
