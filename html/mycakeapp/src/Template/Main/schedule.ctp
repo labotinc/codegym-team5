@@ -2,7 +2,7 @@
 <h1 class="mainTitle">上映スケジュール</h1>
 <ul class="dateList">
   <?php foreach ($dates as $date) : ?>
-    <li class="dateListContent" value="<?= $date['num']?>">
+    <li class="dateListContent" value="<?= $date['num'] ?>">
       <p class="date"><?= h($date['date']->format('n月j日') . '(' . $week[$date['date']->format('w')] . ')'); ?></p>
       <?php if ($date['date']->format('j') === '1') : ?>
         <p class="discountInfo">ファーストデイ割引</p>
@@ -33,7 +33,7 @@
                   <p class="finishTime"><?= h(date('G:i', strtotime('+' . $movie->screening_time . 'minute', strtotime($schedule->start_date)))) ?></p>
                 </div>
                 <?php if ($schedule->start_date > $today) : ?>
-                  <p class="reservationButton"><a href="<?= $this->Url->build(['action' => 'schedule', $schedule->id]) ?>">予約購入</a></p>
+                  <p class="reservationButton"><?= $this->Html->link('予約購入', ['action' => 'schedule', $schedule->id]) ?></p>
                 <?php elseif ($schedule->start_date <= $today) : ?>
                   <p class="nonReservationButton">購入不可</p>
                 <?php endif; ?>
@@ -45,5 +45,5 @@
     <?php endif; ?>
   <?php endforeach; ?>
 </ul>
-<?= $this->HTML->script('jquery.min')?>
-<?= $this->HTML->script('schedule')?>
+<?= $this->HTML->script('jquery.min') ?>
+<?= $this->HTML->script('schedule') ?>
