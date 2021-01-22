@@ -19,9 +19,6 @@ footer a,
 .back-orange {
     color: #ffffff;
 }
-main {
-    padding-bottom: 81px;
-}
 /* button */
 /* buttonの代わりにaタグを使うときは.buttonを付ける.例)a.button.normal-button.back-orange */
 button,
@@ -104,7 +101,9 @@ a {
     color: #262626;
     text-decoration: none;
 }
-
+main {
+    padding-bottom: 81px;
+}
 /* font */
 header * {
     font-size: 16px;
