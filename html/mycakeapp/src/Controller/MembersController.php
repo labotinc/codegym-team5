@@ -131,4 +131,33 @@ class MembersController extends AppController
     {
         $this->viewBuilder()->setLayout('frame-no-title');
     }
+
+    public function password()
+    {
+        $this->viewBuilder()->setLayout('frame-title');
+        if ($this->request->is('post')) {
+            $entity = $this->Members->newEntity($this->request->getData());
+            //↓バリデーションエラーが発生しない場合
+            if (empty($entity->errors('password')) && empty($entity->errors('rePassword')) && empty($entity->errors('email'))) {
+                //↓入力したemailがMembersテーブルに存在する場合。ただし、存在しない場合もメールは送らないが登録完了ページへ遷移させる(基本設計書参照)。
+                if (!empty($this->Members->findByEmail($this->request->data['email'])->toArray())) {
+                    $entity = $this->Members->findByEmail($this->request->data['email'])->toArray();
+                    $entity[0]['password'] = $this->request->data['password'];
+                    if ($this->Members->save($entity[0])) {
+                        return $this->redirect(['action' => 'changed']);
+                    }
+                }
+                return $this->redirect(['action' => 'changed']);
+            }
+        } else {
+            $entity = $this->Members->newEntity();
+        }
+        $title = 'パスワード再登録';
+        $this->set(compact('entity', 'title'));
+    }
+
+    public function changed()
+    {
+        $this->viewBuilder()->setLayout('frame-no-title');
+    }
 }
