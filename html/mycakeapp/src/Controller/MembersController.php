@@ -142,7 +142,7 @@ class MembersController extends AppController
                 //↓入力したemailがMembersテーブルに存在する場合。ただし、存在しない場合もメールは送らないが登録完了ページへ遷移させる(基本設計書参照)。
                 if (!empty($this->Members->findByEmail($this->request->data['email'])->toArray())) {
                     $entity = $this->Members->findByEmail($this->request->data['email'])->toArray();
-                    $entity[0]['password'] = $this->request->date['password'];
+                    $entity[0]['password'] = $this->request->data['password'];
                     if ($this->Members->save($entity[0])) {
                         return $this->redirect(['action' => 'changed']);
                     }
