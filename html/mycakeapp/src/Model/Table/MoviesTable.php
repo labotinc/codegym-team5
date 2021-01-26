@@ -75,9 +75,9 @@ class MoviesTable extends Table
             ->notEmptyString('picture_name');
 
         $validator
-            ->scalar('top_picuture_name')
-            ->maxLength('top_picuture_name', 100)
-            ->allowEmptyString('top_picuture_name');
+            ->scalar('top_picture_name')
+            ->maxLength('top_picture_name', 100)
+            ->allowEmptyString('top_picture_name');
 
         $validator
             ->dateTime('started_at')

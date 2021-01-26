@@ -28,7 +28,7 @@
             echo $this->Form->control('name');
             echo $this->Form->control('screening_time');
             echo $this->Form->control('picture_name');
-            echo $this->Form->control('top_picuture_name');
+            echo $this->Form->control('top_picture_name');
             echo $this->Form->control('started_at');
             echo $this->Form->control('finished_at');
             echo $this->Form->control('is_deleted');

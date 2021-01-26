@@ -10,7 +10,7 @@ use Cake\ORM\Entity;
  * @property string $name
  * @property int $screening_time
  * @property string $picture_name
- * @property string|null $top_picuture_name
+ * @property string|null $top_picture_name
  * @property \Cake\I18n\Time $started_at
  * @property \Cake\I18n\Time $finished_at
  * @property bool $is_deleted
@@ -35,7 +35,7 @@ class Movie extends Entity
         'name' => true,
         'screening_time' => true,
         'picture_name' => true,
-        'top_picuture_name' => true,
+        'top_picture_name' => true,
         'started_at' => true,
         'finished_at' => true,
         'is_deleted' => true,
