@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Auth\DefaultPasswordHasher;
+use Cake\Controller\Component\AuthComponent;
+use Cake\Event\Event;
+use Cake\Routing\Router;
 
 /**
  * Members Controller
@@ -15,8 +19,12 @@ class MembersController extends AppController
 {
     public function initialize()
     {
-        $member = null;
-        $this->set('member', $member);
+        parent::initialize();
+        $member = $this->Auth->user();
+        if (!empty($member)) {
+            // コードレビュー時はコメント化してください
+            return $this->redirect(['controller' => 'error']);
+        }
     }
     /**
      * Index method
@@ -159,5 +167,40 @@ class MembersController extends AppController
     public function changed()
     {
         $this->viewBuilder()->setLayout('frame-no-title');
+    }
+    public function login()
+    {
+        $this->viewBuilder()->setLayout('frame-title');
+        $entity = $this->Members->newEntity();
+        if ($this->request->is('post')) {
+            // ログイン用のvalidationを適応
+            $entity = $this->Members->patchEntity($entity, $this->request->getData(), ['validate' => 'login']);
+            $member = $this->Auth->identify();
+            if (!empty($member)) { //認証成功
+                $this->Auth->setUser($member);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            // ↓認証失敗時のメッセージ(email)はemail形式チェックのエラーメッセージと同じため
+            // email形式チェックのエラーメッセージがない時のみ認証失敗メッセージ(email)を追加する
+            $emailErrors = $entity->getError("email");
+            if (empty($emailErrors["email"])) {
+                $emailError = 'メールアドレスが間違っているようです';
+            } else {
+                $emailError = null;
+            }
+            $passwordError = 'パスワードが間違っているようです';
+            $this->set(compact('passwordError', 'emailError'));
+        }
+        $title = 'ログイン';
+        $this->set(compact('entity', 'title'));
+    }
+    public function logout()
+    {
+        $this->request->session()->destroy();
+        return $this->redirect($this->Auth->logout());
+    }
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
     }
 }
