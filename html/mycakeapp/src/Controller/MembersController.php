@@ -1,7 +1,12 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Auth\DefaultPasswordHasher;
+use Cake\Controller\Component\AuthComponent;
+use Cake\Event\Event;
+use Cake\Routing\Router;
 
 /**
  * Members Controller
@@ -12,6 +17,15 @@ use App\Controller\AppController;
  */
 class MembersController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $member = $this->Auth->user();
+        if (!empty($member)) {
+            // コードレビュー時はコメント化してください
+            return $this->redirect(['controller' => 'error']);
+        }
+    }
     /**
      * Index method
      *
@@ -102,5 +116,91 @@ class MembersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    public function create()
+    {
+        $this->viewBuilder()->setLayout('frame-title');
+        $entity = $this->Members->newEntity();
+        if ($this->request->is('post')) {
+            $entity = $this->Members->patchEntity($entity, $this->request->getData());
+            $entity["total_point"] = 0;
+            $entity["is_deleted"] = 0;
+            $entity["is_provisional"] = 0;
+            $entity["created_at"] = date("Y/m/d H:i:s");
+            $entity["updated_at"] = date("Y/m/d H:i:s");
+            if ($this->Members->save($entity)) {
+                return $this->redirect(['action' => 'saved']);
+            }
+        }
+        $title = "会員登録";
+        $this->set(compact('entity', 'title'));
+    }
+    public function saved()
+    {
+        $this->viewBuilder()->setLayout('frame-no-title');
+    }
+
+    public function password()
+    {
+        $this->viewBuilder()->setLayout('frame-title');
+        if ($this->request->is('post')) {
+            $entity = $this->Members->newEntity($this->request->getData());
+            //↓バリデーションエラーが発生しない場合
+            if (empty($entity->errors('password')) && empty($entity->errors('rePassword')) && empty($entity->errors('email'))) {
+                //↓入力したemailがMembersテーブルに存在する場合。ただし、存在しない場合もメールは送らないが登録完了ページへ遷移させる(基本設計書参照)。
+                if (!empty($this->Members->findByEmail($this->request->data['email'])->toArray())) {
+                    $entity = $this->Members->findByEmail($this->request->data['email'])->toArray();
+                    $entity[0]['password'] = $this->request->data['password'];
+                    if ($this->Members->save($entity[0])) {
+                        return $this->redirect(['action' => 'changed']);
+                    }
+                }
+                return $this->redirect(['action' => 'changed']);
+            }
+        } else {
+            $entity = $this->Members->newEntity();
+        }
+        $title = 'パスワード再登録';
+        $this->set(compact('entity', 'title'));
+    }
+
+    public function changed()
+    {
+        $this->viewBuilder()->setLayout('frame-no-title');
+    }
+    public function login()
+    {
+        $this->viewBuilder()->setLayout('frame-title');
+        $entity = $this->Members->newEntity();
+        if ($this->request->is('post')) {
+            // ログイン用のvalidationを適応
+            $entity = $this->Members->patchEntity($entity, $this->request->getData(), ['validate' => 'login']);
+            $member = $this->Auth->identify();
+            if (!empty($member)) { //認証成功
+                $this->Auth->setUser($member);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            // ↓認証失敗時のメッセージ(email)はemail形式チェックのエラーメッセージと同じため
+            // email形式チェックのエラーメッセージがない時のみ認証失敗メッセージ(email)を追加する
+            $emailErrors = $entity->getError("email");
+            if (empty($emailErrors["email"])) {
+                $emailError = 'メールアドレスが間違っているようです';
+            } else {
+                $emailError = null;
+            }
+            $passwordError = 'パスワードが間違っているようです';
+            $this->set(compact('passwordError', 'emailError'));
+        }
+        $title = 'ログイン';
+        $this->set(compact('entity', 'title'));
+    }
+    public function logout()
+    {
+        $this->request->session()->destroy();
+        return $this->redirect($this->Auth->logout());
+    }
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
     }
 }

@@ -1,0 +1,59 @@
+input:hover,
+input:focus {
+    outline: none;
+}
+
+.content {
+    padding: 108px 0 88px;
+}
+form {
+    height: 236px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+form input {
+    font-size: 16px;
+    letter-spacing: 0.27px;
+    width: 326px;
+    color: #000000;
+    /* 上 | 右 | 下 | 左 */
+    padding: 7px 0 8px 10px;
+    border: none;
+    border-bottom: 0.5px solid #707070;
+}
+form input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+}
+form p {
+    color: #707070;
+}
+.error-message {
+    color: #f46161;
+    font-size: 11px;
+    font-weight: 600;
+}
+div .error-message:first-of-type {
+    padding-top: 6px;
+}
+.error {
+    color: #f46161;
+}
+form div {
+    flex: 1;
+}
+.not-able-login {
+    height: 88px;
+}
+.not-able-login a {
+    display: block;
+    text-align: center;
+    height: 19px;
+    color: #707070;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+.not-able-login a:first-child {
+    padding: 29px 0 21px;
+}

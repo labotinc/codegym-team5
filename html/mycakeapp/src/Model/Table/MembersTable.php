@@ -103,7 +103,30 @@ class MembersTable extends Table
 
         return $validator;
     }
+    public function validationLogin($validator)
+    {
+        $validator->provider('custom', 'App\Model\Validation\CustomValidation');
+        $validator
+            ->email('email', false, 'メールアドレスが間違っているようです')
+            ->requirePresence('email', 'create')
+            ->notEmptyString('email','空白になっています')
+            ->add('email', 'ruleName', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ]);
+        $validator
+            ->scalar('password')
+            ->requirePresence('password', 'create')
+            ->notEmptyString('password', '空白になっています')
+            ->add('password', 'NotBlankOnly', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ]);
 
+        return $validator;
+    }
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
