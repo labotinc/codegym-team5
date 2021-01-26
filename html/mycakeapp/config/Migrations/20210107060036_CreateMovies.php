@@ -29,7 +29,7 @@ class CreateMovies extends AbstractMigration
             'limit' => 100,
             'null' => false,
         ]);
-        $table->addColumn('top_picuture_name', 'string', [
+        $table->addColumn('top_picture_name', 'string', [
             'default' => null,
             'limit' => 100,
             'null' => true,

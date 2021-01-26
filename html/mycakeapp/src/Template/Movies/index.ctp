@@ -23,7 +23,7 @@
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('screening_time') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('picture_name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('top_picuture_name') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('top_picutre_name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('started_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('finished_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('is_deleted') ?></th>
@@ -39,7 +39,7 @@
                 <td><?= h($movie->name) ?></td>
                 <td><?= $this->Number->format($movie->screening_time) ?></td>
                 <td><?= h($movie->picture_name) ?></td>
-                <td><?= h($movie->top_picuture_name) ?></td>
+                <td><?= h($movie->top_picture_name) ?></td>
                 <td><?= h($movie->started_at) ?></td>
                 <td><?= h($movie->finished_at) ?></td>
                 <td><?= h($movie->is_deleted) ?></td>

@@ -29,8 +29,8 @@
             <td><?= h($movie->picture_name) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Top Picuture Name') ?></th>
-            <td><?= h($movie->top_picuture_name) ?></td>
+            <th scope="row"><?= __('Top Picture Name') ?></th>
+            <td><?= h($movie->top_picture_name) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Id') ?></th>
