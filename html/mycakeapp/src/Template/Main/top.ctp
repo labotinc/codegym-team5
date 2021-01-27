@@ -22,7 +22,7 @@
       <?= $this->HTML->image('movies_top/' . $moviePicture['top_picuture_name'], ['class' => 'movie-top-pic']) ?>
     <?php endforeach; ?>
   </div>
-  <?= $this->HTML->link('詳しく見る', ['controller' => '#'], ['class' => 'button normal-button back-orange']) ?>
+  <?= $this->HTML->link('詳しく見る', '#', ['class' => 'button normal-button back-orange']) ?>
 </div>
 <div class="discounts">
   <div class="subtitle">
@@ -34,7 +34,7 @@
       <?= $this->HTML->image('discounts/' . $discountPicture['picture_name'], ['class' => 'discount-pic']) ?>
     <?php endforeach; ?>
   </div>
-  <?= $this->HTML->link('詳しく見る', ['controller' => '#'], ['class' => 'button normal-button back-orange']) ?>
+  <?= $this->HTML->link('詳しく見る', '#', ['class' => 'button normal-button back-orange']) ?>
 </div>
 <?= $this->HTML->script('jquery.min') ?>
 <?= $this->HTML->script('slick.min') ?>
