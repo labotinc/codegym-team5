@@ -21,7 +21,7 @@ class MembersController extends AppController
     {
         parent::initialize();
         $member = $this->Auth->user();
-        if (!empty($member)) {
+        if (!empty($member) && $this->request->action !== 'logout') {
             // コードレビュー時はコメント化してください
             return $this->redirect(['controller' => 'error']);
         }
