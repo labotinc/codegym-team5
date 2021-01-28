@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\Datasource\ConnectionManager;
 
 class MainController extends AppController
 {
@@ -16,6 +17,7 @@ class MainController extends AppController
     $this->loadModel('SlideshowPictures');
     $this->loadModel('Schedules');
     $this->loadModel('Discounts');
+    $this->loadModel('Fees');
   }
 
   public function schedule($id = null)
@@ -107,5 +109,37 @@ class MainController extends AppController
       ->order(['started_at' => 'desc'])
       ->toArray();
     $this->set(compact('slideshowPictures', 'moviePictures', 'discountPictures'));
+  }
+  public function price()
+  {
+    $this->viewBuilder()->setLayout('no-frame');
+    $today = Time::now()->format('Y-m-d H:i:s');
+    $fees = $this->Fees->find()->select(['name', 'fee'])
+      ->where([
+        'is_deleted' => 0,
+        'started_at <=' => $today,
+        'finished_at >=' => $today,
+      ])
+      ->order(['fee' => 'desc'])
+      ->toArray();
+
+    // 生のSQL文実行
+    $connection = ConnectionManager::get('default');
+    // 例)$highestFee-discount_amount=最大割引額
+    $highestFee = $fees[0]->fee;
+    $max_discount_amount = $highestFee . '-discount_amount as max_discount_amount';
+    $where = [
+      "is_deleted = 0",
+      'started_at <= "' . $today . '"',
+      'finished_at >= "' . $today . '"'
+    ];
+    $andWhere = ' AND ' . $where[0] . ' AND ' . $where[1] . ' AND ' . $where[2];
+    $maxDiscountsSql = "SELECT $max_discount_amount,detail,name FROM Discounts WHERE discount_amount>=1000 $andWhere";
+    $discountsSql = "SELECT discount_amount,detail,name FROM Discounts WHERE discount_amount<1000 $andWhere";
+
+    $maxDiscountsResult = $connection->execute($maxDiscountsSql . ' ORDER BY discount_amount desc')->fetchAll('assoc');
+    $discountsResult = $connection->execute($discountsSql . ' ORDER BY discount_amount desc')->fetchAll('assoc');
+
+    $this->set(compact('fees', 'maxDiscountsResult', 'discountsResult'));
   }
 }
