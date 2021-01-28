@@ -129,7 +129,7 @@ class MembersController extends AppController
             $entity["created_at"] = date("Y/m/d H:i:s");
             $entity["updated_at"] = date("Y/m/d H:i:s");
             if ($this->Members->save($entity)) {
-                return $this->redirect(['action' => 'saved']);
+                return $this->redirect(['action' => 'saved'], 308);
             }
         }
         $title = "会員登録";
@@ -138,6 +138,9 @@ class MembersController extends AppController
     public function saved()
     {
         $this->viewBuilder()->setLayout('frame-no-title');
+        if (!($this->request->is('post'))) {
+            return $this->redirect(['controller' => 'error']);
+        }
     }
 
     public function password()
@@ -152,10 +155,10 @@ class MembersController extends AppController
                     $entity = $this->Members->findByEmail($this->request->data['email'])->toArray();
                     $entity[0]['password'] = $this->request->data['password'];
                     if ($this->Members->save($entity[0])) {
-                        return $this->redirect(['action' => 'changed']);
+                        return $this->redirect(['action' => 'changed'],308);
                     }
                 }
-                return $this->redirect(['action' => 'changed']);
+                return $this->redirect(['action' => 'changed'],308);
             }
         } else {
             $entity = $this->Members->newEntity();
@@ -167,6 +170,9 @@ class MembersController extends AppController
     public function changed()
     {
         $this->viewBuilder()->setLayout('frame-no-title');
+        if (!($this->request->is('post'))) {
+            return $this->redirect(['controller' => 'error']);
+        }
     }
     public function login()
     {
