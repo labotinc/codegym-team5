@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -12,6 +13,7 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App\Controller;
 
 use Cake\Controller\Controller;
@@ -45,11 +47,38 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth', [
+            'authorize' => ['Controller' => 'Members'],
+            'authenticate' => [
+                'Form' => [
+                    'fields' => ['username' => 'email', 'password' => 'password'],
+                    'userModel' => 'Members',
+                ]
+            ],
+            'loginAction' => ['controller' => 'Members', 'action' => 'login'],
+            'loginRedirect' => ['controller' => 'main', 'action' => 'top'],
+            'logoutRedirect' => ['controller' => 'main', 'action' => 'top'],
+        ]);
+        $member = $this->Auth->user();
+        $this->set('member', $member);
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+    }
+    public function beforeFilter(Event $event)
+    {
+        $this->Auth->allow();
+        // 座席予約実装後はコメントを外す
+        // $this->Auth->deny('seat');
+    }
+    public function isAuthorized($member = null)
+    {
+        if (!empty($member)) {
+            return true;
+        }
+        return false;
     }
 }
