@@ -19,7 +19,7 @@
   </div>
   <div class="movie-list">
     <?php foreach ($moviePictures as $moviePicture) : ?>
-      <?= $this->HTML->image('movies_top/' . $moviePicture['top_picuture_name'], ['class' => 'movie-top-pic']) ?>
+      <?= $this->HTML->image('movies_top/' . $moviePicture['top_picture_name'], ['class' => 'movie-top-pic']) ?>
     <?php endforeach; ?>
   </div>
   <?= $this->HTML->link('詳しく見る', '#', ['class' => 'button normal-button back-orange']) ?>

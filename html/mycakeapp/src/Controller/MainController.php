@@ -93,7 +93,7 @@ class MainController extends AppController
         'started_at <=' => $today,
         'finished_at >=' => $today,
         'is_deleted' => 0,
-        'top_picuture_name IS NOT NULL'
+        'top_picture_name IS NOT NULL'
       ])
       ->order(['started_at' => 'desc'])
       ->toArray();
