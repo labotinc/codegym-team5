@@ -13,6 +13,7 @@ class MainController extends AppController
   {
     parent::initialize();
     $this->loadModel('Movies');
+    $this->loadModel('SlideshowPictures');
     $this->loadModel('Schedules');
     $this->loadModel('Discounts');
   }
@@ -68,5 +69,43 @@ class MainController extends AppController
         $selectMovies,
       ));
     }
+  }
+
+  public function top()
+  {
+    $this->viewBuilder()->setLayout('no-frame');
+    $today = Time::now();
+    //条件に当てはまるスライドショーを抽出(条件は基本設計書参照)
+    $slideshowPictures = $this->SlideshowPictures->find()
+      ->contain(['Movies'])
+      ->where([
+        'SlideshowPictures.started_at <=' => $today,
+        'SlideshowPictures.finished_at >=' => $today,
+        'SlideshowPictures.is_deleted' => 0,
+        'Movies.is_deleted' => 0
+      ])
+      ->order(['Movies.started_at' => 'desc'])
+      ->limit(3)
+      ->toArray();
+    //条件に当てはまる上映映画一覧画像を抽出
+    $moviePictures = $this->Movies->find()
+      ->where([
+        'started_at <=' => $today,
+        'finished_at >=' => $today,
+        'is_deleted' => 0,
+        'top_picture_name IS NOT NULL'
+      ])
+      ->order(['started_at' => 'desc'])
+      ->toArray();
+    //条件に当てはまる割引画像を表示
+    $discountPictures = $this->Discounts->find()
+      ->where([
+        'started_at <=' => $today,
+        'OR' => [['finished_at >=' => $today], ['finished_at IS NULL']],
+        'is_deleted' => 0
+      ])
+      ->order(['started_at' => 'desc'])
+      ->toArray();
+    $this->set(compact('slideshowPictures', 'moviePictures', 'discountPictures'));
   }
 }

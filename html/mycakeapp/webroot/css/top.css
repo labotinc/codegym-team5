@@ -1,0 +1,54 @@
+/* スライドショー */
+.slideshow{
+  width: 1088px;
+  height: 384px;
+  margin-bottom: 120px;
+}
+.slideshow-pic {
+  width: 1088px;
+  height: 384px;
+}
+/* 上映映画一覧 */
+.movies {
+  margin-bottom: 96px;
+}
+.subtitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.before-subtitle {
+  width: 8px;
+  height: 32px;
+  margin-right: 8px;
+}
+.subtitle-name {
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1.28px;
+  color: #242424;
+}
+.movie-list {
+  display: grid;
+  grid-template-columns: 352px 352px 352px;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.movie-top-pic {
+  width: 352px;
+  height: 208px;
+}
+/* 割引一覧(お得な割引) */
+.discounts {
+  margin-bottom: 100px;
+}
+.discount-list {
+  display: grid;
+  grid-template-columns: 536px 536px;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.discount-pic {
+  width: 536px;
+  height: 96px;
+}

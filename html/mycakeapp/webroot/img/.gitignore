@@ -1,2 +1,5 @@
 movies/*
+discounts/*
+slideshow/*
+movies_top/*
 !.gitkeep
