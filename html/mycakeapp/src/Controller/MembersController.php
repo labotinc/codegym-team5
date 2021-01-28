@@ -191,8 +191,4 @@ class MembersController extends AppController
         $this->request->session()->destroy();
         return $this->redirect($this->Auth->logout());
     }
-    public function beforeFilter(Event $event)
-    {
-        parent::beforeFilter($event);
-    }
 }
