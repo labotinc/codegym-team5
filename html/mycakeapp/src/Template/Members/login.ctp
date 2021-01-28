@@ -4,19 +4,17 @@ echo $this->Form->create($entity, ['novalidate' => true, 'class' => 'flex']);
 ?>
 <div>
     <p>メールアドレス</p>
-    <?php echo $this->Form->email('email', ['placeholder' => 'メールアドレス']);
-    if (!empty($emailError)) : ?>
-        <div class="error-message"><?php echo $emailError; ?></div>
-        <?php echo $this->Form->error('email'); ?>
-    <?php else : ?>
+    <?php echo $this->Form->email('email', ['placeholder' => 'メールアドレス']); ?>
+    <?php if (!empty($AuthCError)) : ?>
+        <div class="error-message"><?php echo $AuthCError; ?></div>
         <?php echo $this->Form->error('email'); ?>
     <?php endif; ?>
 </div>
 <div>
     <p>パスワード</p>
-    <?php echo $this->Form->password('password', ['placeholder' => 'パスワード']);
-    if (!empty($passwordError)) : ?>
-        <div class="error-message"><?php echo $passwordError; ?></div>
+    <?php echo $this->Form->password('password', ['placeholder' => 'パスワード']); ?>
+    <?php if (!empty($AuthCError)) : ?>
+        <div class="error-message"><?php echo $AuthCError; ?></div>
         <?php echo $this->Form->error('password'); ?>
     <?php endif; ?>
 </div>

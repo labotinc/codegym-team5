@@ -180,16 +180,8 @@ class MembersController extends AppController
                 $this->Auth->setUser($member);
                 return $this->redirect($this->Auth->redirectUrl());
             }
-            // ↓認証失敗時のメッセージ(email)はemail形式チェックのエラーメッセージと同じため
-            // email形式チェックのエラーメッセージがない時のみ認証失敗メッセージ(email)を追加する
-            $emailErrors = $entity->getError("email");
-            if (empty($emailErrors["email"])) {
-                $emailError = 'メールアドレスが間違っているようです';
-            } else {
-                $emailError = null;
-            }
-            $passwordError = 'パスワードが間違っているようです';
-            $this->set(compact('passwordError', 'emailError'));
+            $AuthCError = 'メールアドレスかパスワードまたはその両方が間違っているようです';
+            $this->set(compact('AuthCError'));
         }
         $title = 'ログイン';
         $this->set(compact('entity', 'title'));
