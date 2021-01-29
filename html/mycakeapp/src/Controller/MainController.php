@@ -134,10 +134,10 @@ class MainController extends AppController
       'finished_at >= "' . $today . '"'
     ];
     $andWhere = ' AND ' . $where[0] . ' AND ' . $where[1] . ' AND ' . $where[2];
-    $maxDiscountsSql = "SELECT $max_discount_amount,detail,name FROM Discounts WHERE discount_amount>=1000 $andWhere";
-    $discountsSql = "SELECT discount_amount,detail,name FROM Discounts WHERE discount_amount<1000 $andWhere";
+    $maxDiscountsSql = "SELECT $max_discount_amount,detail,name FROM Discounts WHERE detail NOT LIKE '%引き%' $andWhere";
+    $discountsSql = "SELECT discount_amount,detail,name FROM Discounts WHERE detail LIKE '%引き%' $andWhere";
 
-    $maxDiscountsResult = $connection->execute($maxDiscountsSql . ' ORDER BY discount_amount desc')->fetchAll('assoc');
+    $maxDiscountsResult = $connection->execute($maxDiscountsSql . ' ORDER BY max_discount_amount desc')->fetchAll('assoc');
     $discountsResult = $connection->execute($discountsSql . ' ORDER BY discount_amount desc')->fetchAll('assoc');
 
     $this->set(compact('fees', 'maxDiscountsResult', 'discountsResult'));
