@@ -1,0 +1,50 @@
+* {
+    color: #242424;
+}
+.fees,
+.discounts {
+    width: 528px;
+}
+.fees .flex,
+.discounts .flex {
+    justify-content: space-between;
+}
+.fees {
+    padding-bottom: 72px;
+}
+h3 {
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1.28px;
+}
+.fees p {
+    padding: 5px 16px 6px 16px;
+}
+.fees p,
+.discounts p {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.12px;
+}
+.discounts .flex p:first-child {
+    font-size: 10px;
+    letter-spacing: 0.8px;
+}
+.test {
+    padding: 5px 16px 8px 16px;
+}
+.test,
+.fees .flex {
+    border-bottom: 0.5px dashed #707070;
+    margin-top: 10px;
+}
+.test .flex p:first-child {
+    padding-top: 5px;
+}
+h3::before {
+    content: "\00a0";
+    width: 8px;
+    height: 32px;
+    background: #adadad;
+    margin-right: 8px;
+}

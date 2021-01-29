@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\Datasource\ConnectionManager;
 
 class MainController extends AppController
 {
@@ -16,6 +17,7 @@ class MainController extends AppController
     $this->loadModel('SlideshowPictures');
     $this->loadModel('Schedules');
     $this->loadModel('Discounts');
+    $this->loadModel('Fees');
   }
 
   public function schedule($id = null)
@@ -107,5 +109,33 @@ class MainController extends AppController
       ->order(['started_at' => 'desc'])
       ->toArray();
     $this->set(compact('slideshowPictures', 'moviePictures', 'discountPictures'));
+  }
+  public function price()
+  {
+    $this->viewBuilder()->setLayout('no-frame');
+    $today = Time::now()->format('Y-m-d H:i:s');
+    $fees = $this->Fees->find()->select(['name', 'fee'])
+      ->where([
+        'is_deleted' => 0,
+        'started_at <=' => $today,
+        'OR' => [['finished_at >=' => $today], ['finished_at IS NULL']],
+      ])
+      ->order(['fee' => 'desc'])
+      ->toArray();
+
+    $select = ['name', 'displayed_amount', 'detail'];
+    $where = [
+      'is_deleted' => 0,
+      'started_at <=' => $today,
+      'OR' => [['finished_at >=' => $today], ['finished_at IS NULL']],
+    ];
+    $maxDiscountsResult = $this->Discounts->find()->select($select)
+      ->where([$where, 'is_minus' => 0])
+      ->order(['displayed_amount' => 'desc'])->toArray();
+    $discountsResult = $this->Discounts->find()->select($select)
+      ->where([$where, 'is_minus' => 1])
+      ->order(['displayed_amount' => 'desc'])->toArray();
+
+    $this->set(compact('fees', 'maxDiscountsResult', 'discountsResult'));
   }
 }
