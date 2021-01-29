@@ -24,7 +24,7 @@
             <p class="discount-name"><?= h($discount['name']) ?></p>
             <div class="flex">
                 <p><?= h($discount['detail']) ?></p>
-                <p><?= '料金-' . $this->Number->format($discount['displayed_amount']) . '円' ?></p>
+                <p><?= '基本料金-' . $this->Number->format($discount['displayed_amount']) . '円' ?></p>
             </div>
         </div>
     <?php endforeach; ?>
