@@ -20,9 +20,10 @@
             echo $this->Form->control('name');
             echo $this->Form->control('detail');
             echo $this->Form->control('picture_name');
-            echo $this->Form->control('discount_amount');
+            echo $this->Form->control('displayed_amount');
             echo $this->Form->control('started_at');
             echo $this->Form->control('finished_at');
+            echo $this->Form->control('is_minus');
             echo $this->Form->control('is_deleted');
             echo $this->Form->control('created_at');
             echo $this->Form->control('updated_at');

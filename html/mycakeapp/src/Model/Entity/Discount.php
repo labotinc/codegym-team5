@@ -10,9 +10,10 @@ use Cake\ORM\Entity;
  * @property string $name
  * @property string $detail
  * @property string $picture_name
- * @property int $discount_amount
+ * @property int $displayed_amount
  * @property \Cake\I18n\Time $started_at
  * @property \Cake\I18n\Time $finished_at
+ * @property bool $is_minus
  * @property bool $is_deleted
  * @property \Cake\I18n\Time $created_at
  * @property \Cake\I18n\Time $updated_at
@@ -34,9 +35,10 @@ class Discount extends Entity
         'name' => true,
         'detail' => true,
         'picture_name' => true,
-        'discount_amount' => true,
+        'displayed_amount' => true,
         'started_at' => true,
         'finished_at' => true,
+        'is_minus' => true,
         'is_deleted' => true,
         'created_at' => true,
         'updated_at' => true,

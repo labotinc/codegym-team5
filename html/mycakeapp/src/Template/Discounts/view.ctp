@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Discount Amount') ?></th>
-            <td><?= $this->Number->format($discount->discount_amount) ?></td>
+            <td><?= $this->Number->format($discount->displayed_amount) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Started At') ?></th>
@@ -53,6 +53,10 @@
         <tr>
             <th scope="row"><?= __('Updated At') ?></th>
             <td><?= h($discount->updated_at) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Is Minus') ?></th>
+            <td><?= $discount->is_minus ? __('Yes') : __('No'); ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Is Deleted') ?></th>

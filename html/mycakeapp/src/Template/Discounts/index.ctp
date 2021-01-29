@@ -21,9 +21,10 @@
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('detail') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('picture_name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('discount_amount') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('displayed_amount') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('started_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('finished_at') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('is_minus') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('is_deleted') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('updated_at') ?></th>
@@ -37,9 +38,10 @@
                 <td><?= h($discount->name) ?></td>
                 <td><?= h($discount->detail) ?></td>
                 <td><?= h($discount->picture_name) ?></td>
-                <td><?= $this->Number->format($discount->discount_amount) ?></td>
+                <td><?= $this->Number->format($discount->displayed_amount) ?></td>
                 <td><?= h($discount->started_at) ?></td>
                 <td><?= h($discount->finished_at) ?></td>
+                <td><?= h($discount->is_minus) ?></td>
                 <td><?= h($discount->is_deleted) ?></td>
                 <td><?= h($discount->created_at) ?></td>
                 <td><?= h($discount->updated_at) ?></td>
