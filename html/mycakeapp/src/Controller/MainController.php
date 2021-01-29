@@ -118,7 +118,7 @@ class MainController extends AppController
       ->where([
         'is_deleted' => 0,
         'started_at <=' => $today,
-        'finished_at >=' => $today,
+        'OR' => [['finished_at >=' => $today], ['finished_at IS NULL']],
       ])
       ->order(['fee' => 'desc'])
       ->toArray();
