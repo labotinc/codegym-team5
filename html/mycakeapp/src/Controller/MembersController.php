@@ -21,7 +21,7 @@ class MembersController extends AppController
     {
         parent::initialize();
         $member = $this->Auth->user();
-        if (!empty($member) && $this->request->action !== 'logout') {
+        if (!empty($member) && $this->request->action !== 'logout' && $this->request->action !== 'deleted') {
             // コードレビュー時はコメント化してください
             return $this->redirect(['controller' => 'error']);
         }
@@ -196,5 +196,12 @@ class MembersController extends AppController
     {
         $this->request->session()->destroy();
         return $this->redirect($this->Auth->logout());
+    }
+    public function deleted()
+    {
+        $this->viewBuilder()->setLayout('frame-no-title');
+        if (empty($_SERVER['HTTP_REFERER'])) {
+            return $this->redirect(['controller' => 'error']);
+        }
     }
 }
