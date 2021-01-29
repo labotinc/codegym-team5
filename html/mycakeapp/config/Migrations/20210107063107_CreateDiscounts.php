@@ -29,7 +29,7 @@ class CreateDiscounts extends AbstractMigration
             'limit' => 100,
             'null' => false,
         ]);
-        $table->addColumn('discount_amount', 'integer', [
+        $table->addColumn('displayed_amount', 'integer', [
             'default' => null,
             'limit' => 4,
             'null' => false,
@@ -41,6 +41,10 @@ class CreateDiscounts extends AbstractMigration
         $table->addColumn('finished_at', 'datetime', [
             'default' => null,
             'null' => true,
+        ]);
+        $table->addColumn('is_minus', 'boolean', [
+            'default' => 0,
+            'null' => false,
         ]);
         $table->addColumn('is_deleted', 'boolean', [
             'default' => 0,
