@@ -72,9 +72,9 @@ class DiscountsTable extends Table
             ->notEmptyString('picture_name');
 
         $validator
-            ->integer('discount_amount')
-            ->requirePresence('discount_amount', 'create')
-            ->notEmptyString('discount_amount');
+            ->integer('displayed_amount')
+            ->requirePresence('displayed_amount', 'create')
+            ->notEmptyString('displayed_amount');
 
         $validator
             ->dateTime('started_at')
@@ -85,6 +85,10 @@ class DiscountsTable extends Table
             ->dateTime('finished_at')
             ->requirePresence('finished_at', 'create')
             ->notEmptyDateTime('finished_at');
+
+        $validator
+            ->boolean('is_minus')
+            ->notEmptyString('is_minus');
 
         $validator
             ->boolean('is_deleted')
