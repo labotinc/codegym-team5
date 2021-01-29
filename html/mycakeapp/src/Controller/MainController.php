@@ -123,22 +123,18 @@ class MainController extends AppController
       ->order(['fee' => 'desc'])
       ->toArray();
 
-    // 生のSQL文実行
-    $connection = ConnectionManager::get('default');
-    // 例)$highestFee-discount_amount=最大割引額
-    $highestFee = $fees[0]->fee;
-    $max_discount_amount = $highestFee . '-discount_amount as max_discount_amount';
+    $select = ['name', 'displayed_amount', 'detail'];
     $where = [
-      "is_deleted = 0",
-      'started_at <= "' . $today . '"',
-      'finished_at >= "' . $today . '"'
+      'is_deleted' => 0,
+      'started_at <=' => $today,
+      'OR' => [['finished_at >=' => $today], ['finished_at IS NULL']],
     ];
-    $andWhere = ' AND ' . $where[0] . ' AND ' . $where[1] . ' AND ' . $where[2];
-    $maxDiscountsSql = "SELECT $max_discount_amount,detail,name FROM Discounts WHERE detail NOT LIKE '%引き%' $andWhere";
-    $discountsSql = "SELECT discount_amount,detail,name FROM Discounts WHERE detail LIKE '%引き%' $andWhere";
-
-    $maxDiscountsResult = $connection->execute($maxDiscountsSql . ' ORDER BY max_discount_amount desc')->fetchAll('assoc');
-    $discountsResult = $connection->execute($discountsSql . ' ORDER BY discount_amount desc')->fetchAll('assoc');
+    $maxDiscountsResult = $this->Discounts->find()->select($select)
+      ->where([$where, 'is_minus' => 0])
+      ->order(['displayed_amount' => 'desc'])->toArray();
+    $discountsResult = $this->Discounts->find()->select($select)
+      ->where([$where, 'is_minus' => 1])
+      ->order(['displayed_amount' => 'desc'])->toArray();
 
     $this->set(compact('fees', 'maxDiscountsResult', 'discountsResult'));
   }
