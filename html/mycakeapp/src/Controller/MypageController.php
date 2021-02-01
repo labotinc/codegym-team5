@@ -9,11 +9,11 @@ class MypageController extends AppController
     public function initialize()
     {
         parent::initialize();
+        $this->loadModel('Members');
         $member = $this->Auth->user();
         if (empty($member)) {
             return $this->redirect(['controller' => 'error']);
         }
-        $this->loadModel('Members');
     }
 
     public function top()
