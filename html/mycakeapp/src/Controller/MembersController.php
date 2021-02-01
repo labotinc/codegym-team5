@@ -200,8 +200,9 @@ class MembersController extends AppController
     public function deleted()
     {
         $this->viewBuilder()->setLayout('frame-no-title');
-        if (empty($_SERVER['HTTP_REFERER'])) {
+        if (empty($_SESSION['deleted'])) {
             return $this->redirect(['controller' => 'error']);
         }
+        $this->request->session()->destroy();
     }
 }
