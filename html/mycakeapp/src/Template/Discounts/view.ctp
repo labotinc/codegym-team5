@@ -59,6 +59,10 @@
             <td><?= $discount->is_minus ? __('Yes') : __('No'); ?></td>
         </tr>
         <tr>
+            <th scope="row"><?= __('Is Everyone') ?></th>
+            <td><?= $discount->is_everyone ? __('Yes') : __('No'); ?></td>
+        </tr>
+        <tr>
             <th scope="row"><?= __('Is Deleted') ?></th>
             <td><?= $discount->is_deleted ? __('Yes') : __('No'); ?></td>
         </tr>

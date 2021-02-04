@@ -24,6 +24,7 @@
             echo $this->Form->control('started_at');
             echo $this->Form->control('finished_at');
             echo $this->Form->control('is_minus');
+            echo $this->Form->control('is_everyone');
             echo $this->Form->control('is_deleted');
             echo $this->Form->control('created_at');
             echo $this->Form->control('updated_at');

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -89,6 +90,10 @@ class DiscountsTable extends Table
         $validator
             ->boolean('is_minus')
             ->notEmptyString('is_minus');
+
+        $validator
+            ->boolean('is_everyone')
+            ->notEmptyString('is_everyone');
 
         $validator
             ->boolean('is_deleted')

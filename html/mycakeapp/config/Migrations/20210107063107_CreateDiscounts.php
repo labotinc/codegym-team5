@@ -46,6 +46,10 @@ class CreateDiscounts extends AbstractMigration
             'default' => 0,
             'null' => false,
         ]);
+        $table->addColumn('is_everyone', 'boolean', [
+            'default' => 0,
+            'null' => false,
+        ]);
         $table->addColumn('is_deleted', 'boolean', [
             'default' => 0,
             'null' => false,

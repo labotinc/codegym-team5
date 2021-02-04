@@ -14,6 +14,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\Time $started_at
  * @property \Cake\I18n\Time $finished_at
  * @property bool $is_minus
+ * @property bool $is_everyone
  * @property bool $is_deleted
  * @property \Cake\I18n\Time $created_at
  * @property \Cake\I18n\Time $updated_at
@@ -39,6 +40,7 @@ class Discount extends Entity
         'started_at' => true,
         'finished_at' => true,
         'is_minus' => true,
+        'is_everyone' => true,
         'is_deleted' => true,
         'created_at' => true,
         'updated_at' => true,
