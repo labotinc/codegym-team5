@@ -17,4 +17,9 @@ class CustomValidation extends Validation
     {
         return (bool)preg_match(" /^[a-zA-Z0-9]+$/", $value);
     }
+    // 半角英字のみ許可
+    public function HalfSizeAlphabetOnly($value)
+    {
+        return (bool)preg_match(" /^[a-zA-Z]+$/", $value);
+    }
 }

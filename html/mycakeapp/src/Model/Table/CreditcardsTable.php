@@ -55,6 +55,7 @@ class CreditcardsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+        $validator->provider('custom', 'App\Model\Validation\CustomValidation');
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
@@ -62,23 +63,71 @@ class CreditcardsTable extends Table
         $validator
             ->scalar('card_number')
             ->maxLength('card_number', 100)
+            ->creditCard('card_number', 'all', '不正なカード番号です')
             ->requirePresence('card_number', 'create')
-            ->notEmptyString('card_number');
+            ->notEmptyString('card_number')
+            ->integer('card_number', '半角数字以外の文字が使われています')
+            ->notEmptyString('card_number', '空白になっています')
+            ->add('card_number', 'ruleName', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ]);
 
         $validator
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->notEmptyString('name')
+            ->notEmptyString('name', '空白になっています')
+            ->add('name', 'ruleName', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ])
+            ->add('name', 'ruleName', [
+                'rule' => ['HalfSizeAlphabetOnly'],
+                'provider' => 'custom',
+                'message' => '半角英字以外の文字が使われています'
+            ])
+            ->add('password', 'HalfSizeAlphabet', [
+                'rule' => ['HalfSizeAlphabet'],
+                'provider' => 'custom',
+                'message' => '半角英字以外の文字が使われています'
+            ]);
+
 
         $validator
             ->integer('deadline')
             ->requirePresence('deadline', 'create')
-            ->notEmptyString('deadline');
+            ->notEmptyString('deadline')
+            ->integer('deadline', '半角数字以外の文字が使われています')
+            ->notEmptyString('deadline', '空白になっています')
+            ->add('deadline', 'ruleName', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ]);
+
+        $validator
+            ->integer('security_code')
+            ->requirePresence('security_code', true, '空白になっています')
+            ->notEmptyString('security_code', '空白になっています')
+            ->integer('security_code', '半角数字以外の文字が使われています')
+            ->notEmptyString('security_code', '空白になっています')
+            ->add('security_code', 'ruleName', [
+                'rule' => ['NotBlankOnly'],
+                'provider' => 'custom',
+                'message' => '空白になっています'
+            ]);
 
         $validator
             ->boolean('is_deleted')
             ->notEmptyString('is_deleted');
+
+        $validator
+            ->requirePresence('accept', true, '利用規約に同意しなければ、登録することはできません')
+            ->notEmptyString('accept', '利用規約に同意しなければ、登録することはできません');
 
         $validator
             ->dateTime('created_at')
@@ -102,8 +151,20 @@ class CreditcardsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['member_id'], 'Members'));
-
+        $rules->add(
+            function ($entity, $options) use ($rules) {
+                // 削除済データの場合は重複チェックはしない
+                if ($entity->deleted === true) {
+                    return true;
+                }
+                //  card_number と deleted の組み合わせで重複チェック
+                $rule = $rules->isUnique(
+                    ['card_number', 'is_deleted'],
+                    'このクレジットカードは利用できません'
+                );
+                return $rule($entity, $options);
+            }
+        );
         return $rules;
     }
 }

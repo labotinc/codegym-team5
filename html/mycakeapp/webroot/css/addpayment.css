@@ -1,0 +1,56 @@
+input:hover,
+input:focus {
+    outline: none;
+}
+
+.content {
+    padding: 108px 0 88px;
+}
+form {
+    height: 356px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+form input {
+    font-size: 16px;
+    letter-spacing: 0.27px;
+    width: 326px;
+    color: #000000;
+    /* 上 | 右 | 下 | 左 */
+    padding: 7px 0 8px 10px;
+    border: none;
+    border-bottom: 0.5px solid #707070;
+}
+form input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+}
+form p {
+    color: #707070;
+}
+.error-message {
+    padding-top: 6px;
+    color: #f46161;
+    font-size: 11px;
+    font-weight: 600;
+}
+form div {
+    flex: 1;
+}
+.content .flex {
+    width: 336px;
+}
+.content .flex input {
+    width: 100%;
+}
+.content .flex div:first-child {
+    width: 152px;
+    padding-right: 19px;
+}
+label {
+    font-size: 11px;
+}
+#accept input {
+    width: 12px;
+}
