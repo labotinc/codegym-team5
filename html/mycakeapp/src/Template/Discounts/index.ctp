@@ -25,6 +25,7 @@
                 <th scope="col"><?= $this->Paginator->sort('started_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('finished_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('is_minus') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('is_everyone') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('is_deleted') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('updated_at') ?></th>
@@ -42,6 +43,7 @@
                 <td><?= h($discount->started_at) ?></td>
                 <td><?= h($discount->finished_at) ?></td>
                 <td><?= h($discount->is_minus) ?></td>
+                <td><?= h($discount->is_everyone) ?></td>
                 <td><?= h($discount->is_deleted) ?></td>
                 <td><?= h($discount->created_at) ?></td>
                 <td><?= h($discount->updated_at) ?></td>
