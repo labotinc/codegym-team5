@@ -1,0 +1,83 @@
+.movie-detail {
+  text-align: center;
+  font-size: 15px;
+  margin: 0;
+  color: #707070;
+}
+.movie-title {
+  margin: 36px 0 10px;
+}
+.movie-time, .seatNum {
+  margin-bottom: 10px;
+}
+.ticket {
+  margin-bottom: 20px;
+}
+.ticket-form {
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+.ticketDetail {
+  width: 100%;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #707070;
+  border: 1px solid #ADADAD;
+  border-radius: 5px;
+  padding: 10px;
+  margin:0 auto 10px;
+}
+.ticketDetail label:hover,
+.ticketDetail:hover {
+  cursor: pointer;
+}
+.half-button {
+  display: flex;
+  margin-top: 30px;
+}
+/* ラジオボタン変更によるアニメーション及び背景色指定(参考サイトはConfluenceに掲載済) */
+input[type='radio'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  position: relative;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  vertical-align: -0.6rem;
+  transition:all .15s ease-out 0s;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  margin: .4rem;
+  outline: none;
+  border-radius: 10%;
+}
+input[type=radio] {
+  border-radius: 50%;
+}
+input[type=radio]:checked:before {
+  transform: scale(1);
+}
+input[type=radio]:before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 3px;
+  transform: scale(0);
+  transition: all ease-out 250ms;
+}
+input[type=radio] {
+  border: 2px solid #F5AE0B;
+}
+input[type=radio]:checked:before {
+  background: #F5AE0B;
+}
