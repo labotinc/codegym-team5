@@ -44,7 +44,7 @@ $(window).on('load', () => {
   } else {
     $('.add-payment').on('click', () => {
       $('.add-payment').addClass('pressed'); //ボタンを無効化するクラス
-      const addPaymentError = getElement('<p>', 'add-payment-error', 'クレジットカードは2件まで登録できます');
+      const addPaymentError = getElement('<p>', 'add-payment-error', '登録できるクレジットカードは2件までです');
       $('.content').append(addPaymentError);
     });
   }
