@@ -65,7 +65,6 @@ class CreditcardsTable extends Table
             ->maxLength('card_number', 100)
             ->creditCard('card_number', 'all', '不正なカード番号です')
             ->requirePresence('card_number', 'create')
-            ->notEmptyString('card_number')
             ->integer('card_number', '半角数字以外の文字が使われています')
             ->notEmptyString('card_number', '空白になっています')
             ->add('card_number', 'ruleName', [
@@ -78,7 +77,6 @@ class CreditcardsTable extends Table
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
-            ->notEmptyString('name')
             ->notEmptyString('name', '空白になっています')
             ->add('name', 'ruleName', [
                 'rule' => ['NotBlankOnly'],
@@ -89,18 +87,11 @@ class CreditcardsTable extends Table
                 'rule' => ['HalfSizeAlphabetOnly'],
                 'provider' => 'custom',
                 'message' => '半角英字以外の文字が使われています'
-            ])
-            ->add('password', 'HalfSizeAlphabet', [
-                'rule' => ['HalfSizeAlphabet'],
-                'provider' => 'custom',
-                'message' => '半角英字以外の文字が使われています'
             ]);
-
 
         $validator
             ->integer('deadline')
             ->requirePresence('deadline', 'create')
-            ->notEmptyString('deadline')
             ->integer('deadline', '半角数字以外の文字が使われています')
             ->notEmptyString('deadline', '空白になっています')
             ->add('deadline', 'ruleName', [
@@ -112,7 +103,6 @@ class CreditcardsTable extends Table
         $validator
             ->integer('security_code')
             ->requirePresence('security_code', true, '空白になっています')
-            ->notEmptyString('security_code', '空白になっています')
             ->integer('security_code', '半角数字以外の文字が使われています')
             ->notEmptyString('security_code', '空白になっています')
             ->add('security_code', 'ruleName', [
