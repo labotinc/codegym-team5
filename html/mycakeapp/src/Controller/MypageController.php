@@ -104,12 +104,12 @@ class MypageController extends AppController
                 return $this->redirect(['action' => 'addedpayment']);
             }
         } else { //insertのカード数判定
-            $numbeOfCardsOwned = $this->Creditcards->find()->where([
+            $numberOfCardsOwned = $this->Creditcards->find()->where([
                 'member_id' => $this->Auth->user('id'),
                 'is_deleted' => 0,
                 'deadline >=' => $today
             ])->count();
-            if ($numbeOfCardsOwned === 2) {
+            if ($numberOfCardsOwned === 2) {
                 return $this->redirect(['controller' => 'error']);
             }
         }
