@@ -133,7 +133,7 @@ class MypageController extends AppController
         if (empty($_SESSION['addedpayment'])) {
             return $this->redirect(['controller' => 'error']);
         }
-        $_SESSION['addedpayment'] = null;
+        $this->request->session()->delete('addedpayment');
         $title = "会員登録";
         $this->set(compact('title'));
     }
@@ -175,7 +175,7 @@ class MypageController extends AppController
         if (empty($_SESSION['deletedpayment'])) {
             return $this->redirect(['controller' => 'error']);
         }
-        $_SESSION['deletedpayment'] = null;
+        $this->request->session()->delete('deletedpayment');
         $title = "会員登録";
         $this->set(compact('title'));
     }
