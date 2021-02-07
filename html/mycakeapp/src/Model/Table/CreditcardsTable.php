@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Database\Schema\TableSchema as Schema;
 
 /**
  * Creditcards Model
@@ -156,5 +157,11 @@ class CreditcardsTable extends Table
             }
         );
         return $rules;
+    }
+    protected function _initializeSchema(Schema $schema)
+    {
+        parent::_initializeSchema($schema);
+        $schema->columnType('card_number', 'EncryptedType');
+        return $schema;
     }
 }

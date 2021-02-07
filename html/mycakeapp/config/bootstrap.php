@@ -207,3 +207,5 @@ Type::build('timestamp')
 // クレジットカードIDの暗号化に使用
 Configure::write('key','7BwTXQ33XLfkC6A3tZmJTub8xsNsZQ2YJxm');
 Configure::write('salt','NbBcFHw6Se42SwXayWMxrcSwhYCFRcjKygw');
+// 暗号化復号化
+Type::map('EncryptedType', 'App\Database\Type\EncryptedType');
