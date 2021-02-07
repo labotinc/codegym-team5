@@ -109,6 +109,7 @@ class MypageController extends AppController
         }
         if (!empty($this->request->is('Put'))) { //update
             $entity = $this->Creditcards->patchEntity($entity, $this->request->getData());
+            $entity["updated_at"] = date("Y/m/d H:i:s");
             if ($this->Creditcards->save($entity)) {
                 $_SESSION['addedpayment'] = 1;
                 return $this->redirect(['action' => 'addedpayment']);
