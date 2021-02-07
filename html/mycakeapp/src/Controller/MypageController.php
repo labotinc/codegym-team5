@@ -76,7 +76,7 @@ class MypageController extends AppController
         $entity = $this->Creditcards->newEntity();
         $memberId = $this->Auth->user('id');
         $today = date('Ymd');
-        if (!empty($this->request->query['id'])) { //update
+        if (!empty($this->request->query['id'])) { //updateの$entity
             // 暗号化したクレジットカードIDを戻す
             $securityKey = Configure::read('key');
             $securitySalt = Configure::read('salt');
@@ -97,12 +97,6 @@ class MypageController extends AppController
             }
 
             $entity = $this->Creditcards->get($cardId);
-            $entity = $this->Creditcards->patchEntity($entity, $this->request->getData());
-            //updateの日付のみ更新
-            if ($this->Creditcards->save($entity)) {
-                $_SESSION['addedpayment'] = 1;
-                return $this->redirect(['action' => 'addedpayment']);
-            }
         } else { //insertのカード数判定
             $numberOfCardsOwned = $this->Creditcards->find()->where([
                 'member_id' => $this->Auth->user('id'),
@@ -111,6 +105,13 @@ class MypageController extends AppController
             ])->count();
             if ($numberOfCardsOwned === 2) {
                 return $this->redirect(['controller' => 'error']);
+            }
+        }
+        if (!empty($this->request->is('Put'))) { //update
+            $entity = $this->Creditcards->patchEntity($entity, $this->request->getData());
+            if ($this->Creditcards->save($entity)) {
+                $_SESSION['addedpayment'] = 1;
+                return $this->redirect(['action' => 'addedpayment']);
             }
         }
         if (!empty($this->request->is('post'))) { //insert
