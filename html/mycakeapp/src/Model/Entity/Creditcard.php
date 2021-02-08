@@ -8,7 +8,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $member_id
- * @property string $card_number
+ * @property varbinary $card_number
  * @property string $name
  * @property int $deadline
  * @property bool $is_deleted
