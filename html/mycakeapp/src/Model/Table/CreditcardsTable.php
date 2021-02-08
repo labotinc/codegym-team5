@@ -85,7 +85,7 @@ class CreditcardsTable extends Table
                 'message' => '空白になっています'
             ])
             ->add('name', 'ruleName', [
-                'rule' => ['HalfSizeAlphabetOnly'],
+                'rule' => ['HalfSizeAlphabetAndSpaceOnly'],
                 'provider' => 'custom',
                 'message' => '半角英字以外の文字が使われています'
             ]);

@@ -17,9 +17,9 @@ class CustomValidation extends Validation
     {
         return (bool)preg_match(" /^[a-zA-Z0-9]+$/", $value);
     }
-    // 半角英字のみ許可
-    public function HalfSizeAlphabetOnly($value)
+    // 半角英字と半角のスペースのみ許可
+    public function HalfSizeAlphabetAndSpaceOnly($value)
     {
-        return (bool)preg_match(" /^[a-zA-Z]+$/", $value);
+        return (bool)preg_match(" /^[a-zA-Z ]+$/", $value);
     }
 }
