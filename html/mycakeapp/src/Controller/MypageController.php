@@ -126,7 +126,7 @@ class MypageController extends AppController
                 return $this->redirect(['action' => 'addedpayment']);
             }
         }
-        $title = "会員登録";
+        $title = "決済情報";
         $this->set(compact('entity', 'title'));
     }
     public function addedpayment()
@@ -136,7 +136,7 @@ class MypageController extends AppController
             return $this->redirect(['controller' => 'error']);
         }
         $this->request->session()->delete('addedpayment');
-        $title = "会員登録";
+        $title = "決済情報";
         $this->set(compact('title'));
     }
     public function deletepayment()
