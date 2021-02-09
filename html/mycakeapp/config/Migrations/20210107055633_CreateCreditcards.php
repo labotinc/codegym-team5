@@ -19,9 +19,9 @@ class CreateCreditcards extends AbstractMigration
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addColumn('card_number', 'string', [
+        $table->addColumn('card_number', 'varbinary', [
             'default' => null,
-            'limit' => 100,
+            'limit' => 256,
             'null' => false,
         ]);
         $table->addColumn('name', 'string', [
