@@ -97,6 +97,7 @@ class MypageController extends AppController
             }
 
             $entity = $this->Creditcards->get($cardId);
+            $previousCardNumber = $entity['card_number'];
         } else { //insertのカード数判定
             $numberOfCardsOwned = $this->Creditcards->find()->where([
                 'member_id' => $this->Auth->user('id'),
@@ -109,19 +110,30 @@ class MypageController extends AppController
         }
         if (!empty($this->request->is('Put'))) { //update
             $entity = $this->Creditcards->patchEntity($entity, $this->request->getData());
+
+            $isCardNumberExist = in_array($entity['card_number'], $this->Creditcards->find('AllCardNumbers'), true);
+            if ($isCardNumberExist === true && $entity['card_number'] !== $previousCardNumber) {
+                $cardNumberIsNotUnique = "このクレジットカードは利用できません";
+                $this->set(compact('cardNumberIsNotUnique'));
+            }
             $entity["updated_at"] = date("Y/m/d H:i:s");
-            if ($this->Creditcards->save($entity)) {
+            if ($this->Creditcards->save($entity) && empty($cardNumberIsNotUnique)) {
                 $_SESSION['addedpayment'] = 1;
                 return $this->redirect(['action' => 'addedpayment']);
             }
         }
         if (!empty($this->request->is('post'))) { //insert
             $entity = $this->Creditcards->patchEntity($entity, $this->request->getData());
+            $isCardNumberExist = in_array($entity['card_number'], $this->Creditcards->find('AllCardNumbers'), true);
+            if ($isCardNumberExist === true) {
+                $cardNumberIsNotUnique = "このクレジットカードは利用できません";
+                $this->set(compact('cardNumberIsNotUnique'));
+            }
             $entity["member_id"] = $this->Auth->user('id');
             $entity["is_deleted"] = 0;
             $entity["created_at"] = date("Y/m/d H:i:s");
             $entity["updated_at"] = date("Y/m/d H:i:s");
-            if ($this->Creditcards->save($entity)) {
+            if ($this->Creditcards->save($entity) && empty($cardNumberIsNotUnique)) {
                 $_SESSION['addedpayment'] = 1;
                 return $this->redirect(['action' => 'addedpayment']);
             }

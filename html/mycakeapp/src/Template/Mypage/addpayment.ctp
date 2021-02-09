@@ -8,6 +8,7 @@
     echo $this->Form->card_number('card_number', ['placeholder' => '1111222233334444']);
     echo $this->Form->error('card_number');
     ?>
+    <p class="error-message"><?php echo $cardNumberIsNotUnique = (!empty($cardNumberIsNotUnique)) ? $cardNumberIsNotUnique : null; ?></p>
 </div>
 <div>
     <p>クレジットカード名義</p>

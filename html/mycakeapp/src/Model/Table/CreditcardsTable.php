@@ -142,20 +142,8 @@ class CreditcardsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add(
-            function ($entity, $options) use ($rules) {
-                // 削除済データの場合は重複チェックはしない
-                if ($entity->deleted === true) {
-                    return true;
-                }
-                //  card_number と deleted の組み合わせで重複チェック
-                $rule = $rules->isUnique(
-                    ['card_number', 'is_deleted'],
-                    'このクレジットカードは利用できません'
-                );
-                return $rule($entity, $options);
-            }
-        );
+        $rules->add($rules->existsIn(['member_id'], 'Members'));
+
         return $rules;
     }
     protected function _initializeSchema(Schema $schema)
@@ -163,5 +151,17 @@ class CreditcardsTable extends Table
         parent::_initializeSchema($schema);
         $schema->columnType('card_number', 'EncryptedType');
         return $schema;
+    }
+    public function findAllCardNumbers(Query $query, array $options)
+    {
+        $today = date('Ymd');
+        $allCardNumbersArray = $query->select(['card_number'])->where([
+            'is_deleted' => 0,
+            'deadline >=' => $today
+        ])->toArray();
+        foreach ($allCardNumbersArray as $allCardNumberArray) {
+            $allCardNumbers[] = $allCardNumberArray->card_number;
+        }
+        return $allCardNumbers;
     }
 }
