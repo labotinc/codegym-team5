@@ -8,23 +8,16 @@
 <?php
 echo $this->Form->create(null, ['novalidate' => true, 'class' => 'flex ticket-form']);
 //割引の条件や種類が変わるごとに調整する必要あり。(今回はファーストデー割引のみ適用させている)
-if ($schedule->start_date->format('j') === '1') :
-  foreach ($discounts['everyone'] as $everyoneDiscount) :
-    if ($everyoneDiscount['id'] === 3) :
-?>
-      <label class="ticketDetail" for="<?= $everyoneDiscount['id'] ?>">
-        <?php echo $this->Form->radio('discount', [['text' => $everyoneDiscount['name'], 'value' => $everyoneDiscount['id'], 'id' => $everyoneDiscount['id'], 'checked' => true]], ['hiddenField' => false]); ?>
-        <?php if ((int)$everyoneDiscount['is_minus'] === 1) : ?>
-          <p>基本料金-<?= $this->Number->format($everyoneDiscount['displayed_amount']) ?>円</p>
-        <?php elseif ((int)$everyoneDiscount['is_minus'] === 0) : ?>
-          <p><?= $this->Number->format($everyoneDiscount['displayed_amount']) ?>円</p>
-        <?php endif; ?>
-      </label>
-  <?php
-    endif;
-  endforeach;
-else :
-  ?>
+if ($schedule->start_date->format('j') === '1') : ?>
+  <label class="ticketDetail" for="<?= $discounts['everyone'][0]['id'] ?>">
+    <?php echo $this->Form->radio('discount', [['text' => $discounts['everyone'][0]['name'], 'value' => $discounts['everyone'][0]['id'], 'id' => $discounts['everyone'][0]['id'], 'checked' => true]], ['hiddenField' => false]); ?>
+    <?php if ((int)$discounts['everyone'][0]['is_minus'] === 1) : ?>
+      <p>基本料金-<?= $this->Number->format($discounts['everyone'][0]['displayed_amount']) ?>円</p>
+    <?php elseif ((int)$discounts['everyone'][0]['is_minus'] === 0) : ?>
+      <p><?= $this->Number->format($discounts['everyone'][0]['displayed_amount']) ?>円</p>
+    <?php endif; ?>
+  </label>
+<?php else : ?>
   <label class="ticketDetail" for="0">
     <?php echo $this->Form->radio('discount', [['text' => '該当なし', 'value' => '0', 'id' => '0', 'checked' => true]], ['hiddenField' => false]); ?>
     <p></p>
