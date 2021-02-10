@@ -11,8 +11,8 @@
     <p><?= $this->Number->format($ticket['fee']) ?>円</p>
   </label>
 <?php endforeach; ?>
-<?php if (!empty($error)) : ?>
-  <p class="error"><?= $error ?></p>
+<?php if (!empty($notSelectError)) : ?>
+  <p class="error"><?= $notSelectError ?></p>
 <?php endif; ?>
 <div class="half-button">
   <?php

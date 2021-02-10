@@ -78,15 +78,16 @@ class ReservesController extends AppController
         }
         if ($this->request->is('post')) {
             if (empty($this->request->data['detail'])) { //何も選択しない状態で送信した時
-                $error = '※チケット種別を選択してください';
-                $this->set(compact('error'));
+                $notSelectError = '※チケット種別を選択してください';
+                $this->set(compact('notSelectError'));
             }
-            if (!empty($this->request->data['detail']) && in_array($this->request->data['detail'], $ticketId)) {
+            $isTicketIdExist = in_array($this->request->data['detail'], $ticketId);
+            if (empty($notSelectError) && $isTicketIdExist === true) {
                 $_SESSION['schedule'] = $schedule;
                 $_SESSION['detail'] = $detail;
                 $_SESSION['detail']['fee_id'] = $this->request->data['detail'];
                 return $this->redirect(['controller' => 'reserves', 'action' => 'discount']);
-            } elseif (!empty($this->request->data['detail']) && !(in_array($this->request->data['detail'], $ticketId))) { //開発者ツールにて$ticketId以外の値に変更して送信した時
+            } elseif (empty($notSelectError) && $isTicketIdExist === false) { //開発者ツールにて$ticketId以外の値に変更して送信した時
                 return $this->redirect(['controller' => 'error']);
             }
         }
