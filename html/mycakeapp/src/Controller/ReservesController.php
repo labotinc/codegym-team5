@@ -47,8 +47,8 @@ class ReservesController extends AppController
         $_SESSION['seat']['column_number'] = 'A';
         $_SESSION['seat']['record_number'] = 1;
 
-        //URL直打ち対策
-        if (empty($_SESSION['seat'])) {
+        //URL直打ち対策(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
+        if (empty($_SESSION['seat']) || $this->referer(null, true) !== '/reserves/seat' && $this->referer(null, true) !== '/reserves/ticket') {
             return $this->redirect(['controller' => 'error']);
         }
         $this->viewBuilder()->setLayout('frame-title');
@@ -96,8 +96,8 @@ class ReservesController extends AppController
 
     public function discount()
     {
-        //URL直打ち対策
-        if (!(isset($_SESSION['detail']['fee_id']))) {
+        //URL直打ち対策(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
+        if (!(isset($_SESSION['detail']['fee_id'])) || $this->referer(null, true) !== '/reserves/ticket' && $this->referer(null, true) !== '/reserves/discount') {
             return $this->redirect(['controller' => 'error']);
         }
         $this->viewBuilder()->setLayout('frame-title');
@@ -123,18 +123,36 @@ class ReservesController extends AppController
                 'is_deleted' => 0,
             ])
             ->toArray();
+        if ($schedule->start_date->format('j') === '1') {
+            //取得した基本料金情報のID配列を作成(全員対象)
+            foreach ($discounts['everyone'] as $everyone) {
+                $discountId[] = $everyone->id;
+            }
+        } else {
+            //取得した基本料金情報のID配列を作成(一部対象)
+            foreach ($discounts['notEveryone'] as $notEveryone) {
+                $discountId[] = $notEveryone->id;
+            }
+            $discountId[] = '0'; //該当なしの値
+        }
         if ($this->request->is('post')) {
-            $_SESSION['detail']['discount_id'] = $this->request->data['discount'];
-            $_SESSION['fee'] = $feeTicket;
-            return $this->redirect(['controller' => 'reserves', 'action' => 'checkdetail']);
+            $isTicketIdExist = in_array($this->request->data['discount'], $discountId);
+            //↓今回は実装の都合上特別雨の日割引と複数人予約割引は対象から外して値を限定する。
+            if ($isTicketIdExist === true && ($this->request->data['discount'] === '2' || $this->request->data['discount'] === '3' || $this->request->data['discount'] === '0')) {
+                $_SESSION['detail']['discount_id'] = $this->request->data['discount'];
+                $_SESSION['fee'] = $feeTicket;
+                return $this->redirect(['controller' => 'reserves', 'action' => 'checkdetail']);
+            } elseif ($isTicketIdExist === false) {
+                return $this->redirect(['controller' => 'error']);
+            }
         }
         $this->set(compact('title', 'detail', 'discounts', 'schedule', 'feeTicket'));
     }
 
     public function checkdetail()
     {
-        //直接画面遷移の対応
-        if (!(isset($_SESSION['detail']['discount_id']))) {
+        //直接画面遷移の対応(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
+        if (!(isset($_SESSION['detail']['discount_id'])) || $this->referer(null, true) !== '/reserves/discount' && $this->referer(null, true) !== '/reserves/checkdetail') {
             return $this->redirect(['controller' => 'error']);
         }
         $this->viewBuilder()->setLayout('frame-title');
