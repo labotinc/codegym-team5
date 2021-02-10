@@ -24,6 +24,8 @@
                 <th scope="col"><?= $this->Paginator->sort('member_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('schedule_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('creditcard_id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('column_number') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('record_number') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('is_cancelled') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('updated_at') ?></th>
@@ -36,6 +38,8 @@
                 <td><?= $payment->has('member') ? $this->Html->link($payment->member->id, ['controller' => 'Members', 'action' => 'view', $payment->member->id]) : '' ?></td>
                 <td><?= $payment->has('schedule') ? $this->Html->link($payment->schedule->id, ['controller' => 'Schedules', 'action' => 'view', $payment->schedule->id]) : '' ?></td>
                 <td><?= $payment->has('creditcard') ? $this->Html->link($payment->creditcard->name, ['controller' => 'Creditcards', 'action' => 'view', $payment->creditcard->id]) : '' ?></td>
+                <td><?= h($seatReservation->column_number) ?></td>
+                <td><?= h($seatReservation->record_number) ?></td>
                 <td><?= h($payment->is_cancelled) ?></td>
                 <td><?= h($payment->created_at) ?></td>
                 <td><?= h($payment->updated_at) ?></td>

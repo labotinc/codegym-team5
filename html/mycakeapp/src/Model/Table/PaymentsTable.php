@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -69,6 +70,16 @@ class PaymentsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+        $validator
+            ->scalar('column_number')
+            ->maxLength('column_number', 2)
+            ->allowEmptyString('column_number', null, 'create');
+
+        $validator
+            ->scalar('record_number')
+            ->maxLength('record_number', 2)
+            ->allowEmptyString('record_number', null, 'create');
+
         $validator
             ->boolean('is_cancelled')
             ->notEmptyString('is_cancelled');

@@ -24,6 +24,16 @@ class CreatePayments extends AbstractMigration
             'limit' => 11,
             'null' => false,
         ]);
+        $table->addColumn('column_number', 'string', [
+            'default' => null,
+            'limit' => 2,
+            'null' => false,
+        ]);
+        $table->addColumn('record_number', 'string', [
+            'default' => null,
+            'limit' => 2,
+            'null' => false,
+        ]);
         $table->addColumn('creditcard_id', 'integer', [
             'default' => null,
             'limit' => 11,

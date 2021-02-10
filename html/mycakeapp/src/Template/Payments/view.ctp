@@ -35,6 +35,14 @@
             <td><?= $payment->has('creditcard') ? $this->Html->link($payment->creditcard->name, ['controller' => 'Creditcards', 'action' => 'view', $payment->creditcard->id]) : '' ?></td>
         </tr>
         <tr>
+            <th scope="row"><?= __('Column Number') ?></th>
+            <td><?= h($reservationDetail->column_number) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Record Number') ?></th>
+            <td><?= h($reservationDetail->record_number) ?></td>
+        </tr>
+        <tr>
             <th scope="row"><?= __('Created At') ?></th>
             <td><?= h($payment->created_at) ?></td>
         </tr>
