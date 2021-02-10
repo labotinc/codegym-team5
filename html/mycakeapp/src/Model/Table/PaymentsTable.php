@@ -81,6 +81,11 @@ class PaymentsTable extends Table
             ->allowEmptyString('record_number', null, 'create');
 
         $validator
+            ->integer('purchase_price')
+            ->requirePresence('purchase_price', 'create')
+            ->notEmptyString('purchase_price');
+
+        $validator
             ->boolean('is_cancelled')
             ->notEmptyString('is_cancelled');
 

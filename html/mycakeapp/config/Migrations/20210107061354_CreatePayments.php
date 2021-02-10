@@ -39,6 +39,11 @@ class CreatePayments extends AbstractMigration
             'limit' => 11,
             'null' => false,
         ]);
+        $table->addColumn('purchase_price', 'integer', [
+            'default' => null,
+            'limit' => 11,
+            'null' => false,
+        ]);
         $table->addColumn('is_cancelled', 'boolean', [
             'default' => 0,
             'null' => false,

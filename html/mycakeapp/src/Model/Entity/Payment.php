@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * @property int $member_id
  * @property int $schedule_id
  * @property int $creditcard_id
+ * @property int $purchase_price
  * @property string $column_number
  * @property string $record_number
  * @property bool $is_cancelled
@@ -32,6 +33,7 @@ class Payment extends Entity
      */
     protected $_accessible = [
         'creditcard_id' => true,
+        'purchase_price' => true,
         'is_cancelled' => true,
         'created_at' => true,
         'updated_at' => true,
