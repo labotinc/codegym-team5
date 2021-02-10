@@ -21,6 +21,8 @@
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('member_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('schedule_id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('column_number') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('record_number') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('point') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('is_cancelled') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created_at') ?></th>
@@ -33,6 +35,8 @@
             <tr>
                 <td><?= $point->has('member') ? $this->Html->link($point->member->id, ['controller' => 'Members', 'action' => 'view', $point->member->id]) : '' ?></td>
                 <td><?= $point->has('schedule') ? $this->Html->link($point->schedule->id, ['controller' => 'Schedules', 'action' => 'view', $point->schedule->id]) : '' ?></td>
+                <td><?= h($point->column_number) ?></td>
+                <td><?= h($point->record_number) ?></td>
                 <td><?= $this->Number->format($point->point) ?></td>
                 <td><?= h($point->is_cancelled) ?></td>
                 <td><?= h($point->created_at) ?></td>

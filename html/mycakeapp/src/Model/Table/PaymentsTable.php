@@ -48,7 +48,7 @@ class PaymentsTable extends Table
             'joinType' => 'INNER',
         ]);
         $this->hasMany('Points', [
-            'foreignKey' => ['member_id', 'schedule_id'],
+            'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
         ]);
         $this->belongsTo('Members', [
             'foreignKey' => 'member_id',
