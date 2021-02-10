@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Point $point
@@ -27,6 +28,14 @@
         <tr>
             <th scope="row"><?= __('Schedule') ?></th>
             <td><?= $point->has('schedule') ? $this->Html->link($point->schedule->id, ['controller' => 'Schedules', 'action' => 'view', $point->schedule->id]) : '' ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Column Number') ?></th>
+            <td><?= h($payment->column_number) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Record Number') ?></th>
+            <td><?= h($payment->record_number) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Point') ?></th>

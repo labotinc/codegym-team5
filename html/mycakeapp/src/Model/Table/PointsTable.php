@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -35,10 +36,10 @@ class PointsTable extends Table
 
         $this->setTable('points');
         $this->setDisplayField('member_id');
-        $this->setPrimaryKey(['member_id', 'schedule_id']);
+        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number']);
 
         $this->belongsTo('Payments', [
-            'foreignKey' => ['member_id', 'schedule_id'],
+            'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
             'joinType' => 'INNER',
         ]);
     }
@@ -51,6 +52,16 @@ class PointsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+        $validator
+            ->scalar('column_number')
+            ->maxLength('column_number', 2)
+            ->allowEmptyString('column_number', null, 'create');
+
+        $validator
+            ->scalar('record_number')
+            ->maxLength('record_number', 2)
+            ->allowEmptyString('record_number', null, 'create');
+
         $validator
             ->integer('point')
             ->requirePresence('point', 'create')

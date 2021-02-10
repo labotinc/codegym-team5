@@ -28,6 +28,7 @@
         <legend><?= __('Edit Payment') ?></legend>
         <?php
             echo $this->Form->control('creditcard_id', ['options' => $creditcards]);
+            echo $this->Form->control('purchase_price');
             echo $this->Form->control('is_cancelled');
             echo $this->Form->control('created_at');
             echo $this->Form->control('updated_at');

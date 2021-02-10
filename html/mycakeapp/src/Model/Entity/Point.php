@@ -8,6 +8,8 @@ use Cake\ORM\Entity;
  *
  * @property int $member_id
  * @property int $schedule_id
+ * @property string $column_number
+ * @property string $record_number
  * @property int $point
  * @property bool $is_cancelled
  * @property \Cake\I18n\Time $created_at
