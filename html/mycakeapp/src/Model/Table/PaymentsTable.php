@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -36,16 +37,18 @@ class PaymentsTable extends Table
 
         $this->setTable('payments');
         $this->setDisplayField('member_id');
-        $this->setPrimaryKey(['member_id', 'schedule_id']);
+        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number']);
 
-        $this->hasMany('SeatReservations', [
-            'foreignKey' => ['member_id', 'schedule_id'],
+        $this->belongsTo('SeatReservations', [
+            'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
+            'joinType' => 'INNER',
         ]);
-        $this->hasMany('ReservationDetail', [
-            'foreignKey' => ['member_id', 'schedule_id'],
+        $this->belongsTo('ReservationDetail', [
+            'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
+            'joinType' => 'INNER',
         ]);
         $this->hasMany('Points', [
-            'foreignKey' => ['member_id', 'schedule_id'],
+            'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
         ]);
         $this->belongsTo('Members', [
             'foreignKey' => 'member_id',
@@ -69,6 +72,21 @@ class PaymentsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+        $validator
+            ->scalar('column_number')
+            ->maxLength('column_number', 2)
+            ->allowEmptyString('column_number', null, 'create');
+
+        $validator
+            ->scalar('record_number')
+            ->maxLength('record_number', 2)
+            ->allowEmptyString('record_number', null, 'create');
+
+        $validator
+            ->integer('purchase_price')
+            ->requirePresence('purchase_price', 'create')
+            ->notEmptyString('purchase_price');
+
         $validator
             ->boolean('is_cancelled')
             ->notEmptyString('is_cancelled');

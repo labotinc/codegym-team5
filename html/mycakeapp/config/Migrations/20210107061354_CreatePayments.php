@@ -13,7 +13,7 @@ class CreatePayments extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('payments', ['id' => false, 'primary_key' => ['member_id', 'schedule_id']]);
+        $table = $this->table('payments', ['id' => false, 'primary_key' => ['member_id', 'schedule_id', 'column_number', 'record_number']]);
         $table->addColumn('member_id', 'integer', [
             'default' => null,
             'limit' => 11,
@@ -24,7 +24,22 @@ class CreatePayments extends AbstractMigration
             'limit' => 11,
             'null' => false,
         ]);
+        $table->addColumn('column_number', 'string', [
+            'default' => null,
+            'limit' => 2,
+            'null' => false,
+        ]);
+        $table->addColumn('record_number', 'string', [
+            'default' => null,
+            'limit' => 2,
+            'null' => false,
+        ]);
         $table->addColumn('creditcard_id', 'integer', [
+            'default' => null,
+            'limit' => 11,
+            'null' => false,
+        ]);
+        $table->addColumn('purchase_price', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false,
