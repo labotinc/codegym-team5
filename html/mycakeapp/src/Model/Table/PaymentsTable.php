@@ -37,13 +37,15 @@ class PaymentsTable extends Table
 
         $this->setTable('payments');
         $this->setDisplayField('member_id');
-        $this->setPrimaryKey(['member_id', 'schedule_id']);
+        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number']);
 
-        $this->hasMany('SeatReservations', [
-            'foreignKey' => ['member_id', 'schedule_id'],
+        $this->belongsTo('SeatReservations', [
+            'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
+            'joinType' => 'INNER',
         ]);
-        $this->hasMany('ReservationDetail', [
-            'foreignKey' => ['member_id', 'schedule_id'],
+        $this->belongsTo('ReservationDetail', [
+            'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
+            'joinType' => 'INNER',
         ]);
         $this->hasMany('Points', [
             'foreignKey' => ['member_id', 'schedule_id'],

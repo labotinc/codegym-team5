@@ -13,7 +13,7 @@ class CreatePayments extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('payments', ['id' => false, 'primary_key' => ['member_id', 'schedule_id']]);
+        $table = $this->table('payments', ['id' => false, 'primary_key' => ['member_id', 'schedule_id', 'column_number', 'record_number']]);
         $table->addColumn('member_id', 'integer', [
             'default' => null,
             'limit' => 11,

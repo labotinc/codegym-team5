@@ -39,8 +39,8 @@
                 <td><?= $payment->has('member') ? $this->Html->link($payment->member->id, ['controller' => 'Members', 'action' => 'view', $payment->member->id]) : '' ?></td>
                 <td><?= $payment->has('schedule') ? $this->Html->link($payment->schedule->id, ['controller' => 'Schedules', 'action' => 'view', $payment->schedule->id]) : '' ?></td>
                 <td><?= $payment->has('creditcard') ? $this->Html->link($payment->creditcard->name, ['controller' => 'Creditcards', 'action' => 'view', $payment->creditcard->id]) : '' ?></td>
-                <td><?= h($seatReservation->column_number) ?></td>
-                <td><?= h($seatReservation->record_number) ?></td>
+                <td><?= h($payment->column_number) ?></td>
+                <td><?= h($payment->record_number) ?></td>
                 <td><?= h($payment->purchase_price) ?></td>
                 <td><?= h($payment->is_cancelled) ?></td>
                 <td><?= h($payment->created_at) ?></td>

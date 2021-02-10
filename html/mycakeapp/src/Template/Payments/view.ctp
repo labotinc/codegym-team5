@@ -36,11 +36,11 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Column Number') ?></th>
-            <td><?= h($reservationDetail->column_number) ?></td>
+            <td><?= h($payment->column_number) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Record Number') ?></th>
-            <td><?= h($reservationDetail->record_number) ?></td>
+            <td><?= h($payment->record_number) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Purchase Price') ?></th>
