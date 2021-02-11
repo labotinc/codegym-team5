@@ -190,7 +190,7 @@ class MypageController extends AppController
             return $this->redirect(['controller' => 'error']);
         }
         $this->request->session()->delete('deletedpayment');
-        $title = "会員登録";
+        $title = "決済情報";
         $this->set(compact('title'));
     }
 }
