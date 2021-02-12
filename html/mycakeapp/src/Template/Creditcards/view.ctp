@@ -38,7 +38,7 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Deadline') ?></th>
-            <td><?= $this->Number->format($creditcard->deadline) ?></td>
+            <td><?= h($creditcard->deadline) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Created At') ?></th>
