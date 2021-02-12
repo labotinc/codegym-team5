@@ -99,11 +99,12 @@ class MypageController extends AppController
             if ($isCardNumberExist === true && $entity['card_number'] !== $previousCardNumber) {
                 $cardNumberIsNotUnique = "このクレジットカードは利用できません";
                 $this->set(compact('cardNumberIsNotUnique'));
-            }
-            $entity["updated_at"] = date("Y/m/d H:i:s");
-            if (empty($cardNumberIsNotUnique) && $this->Creditcards->save($entity)) {
-                $_SESSION['addedpayment'] = 1;
-                return $this->redirect(['action' => 'addedpayment']);
+            } else {
+                $entity["updated_at"] = date("Y/m/d H:i:s");
+                if (empty($cardNumberIsNotUnique) && $this->Creditcards->save($entity)) {
+                    $_SESSION['addedpayment'] = 1;
+                    return $this->redirect(['action' => 'addedpayment']);
+                }
             }
         }
         if (!empty($this->request->is('post'))) { //insert
@@ -112,14 +113,15 @@ class MypageController extends AppController
             if ($isCardNumberExist === true) {
                 $cardNumberIsNotUnique = "このクレジットカードは利用できません";
                 $this->set(compact('cardNumberIsNotUnique'));
-            }
-            $entity["member_id"] = $this->Auth->user('id');
-            $entity["is_deleted"] = 0;
-            $entity["created_at"] = date("Y/m/d H:i:s");
-            $entity["updated_at"] = date("Y/m/d H:i:s");
-            if ($this->Creditcards->save($entity) && empty($cardNumberIsNotUnique)) {
-                $_SESSION['addedpayment'] = 1;
-                return $this->redirect(['action' => 'addedpayment']);
+            } else {
+                $entity["member_id"] = $this->Auth->user('id');
+                $entity["is_deleted"] = 0;
+                $entity["created_at"] = date("Y/m/d H:i:s");
+                $entity["updated_at"] = date("Y/m/d H:i:s");
+                if ($this->Creditcards->save($entity) && empty($cardNumberIsNotUnique)) {
+                    $_SESSION['addedpayment'] = 1;
+                    return $this->redirect(['action' => 'addedpayment']);
+                }
             }
         }
         $title = "決済情報";
