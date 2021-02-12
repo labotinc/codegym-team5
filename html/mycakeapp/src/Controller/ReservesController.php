@@ -33,6 +33,7 @@ class ReservesController extends AppController
                 ->toArray();
             $seatReservation[0]['is_cancelled'] = '1';
             if (!($this->SeatReservations->save($seatReservation['0']))) {
+                $this->request->session()->delete('seat');
                 return $this->redirect(['controller' => 'error']);
             }
             $this->request->session()->delete('seat');
@@ -49,6 +50,7 @@ class ReservesController extends AppController
 
         //URL直打ち対策(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
         if (empty($_SESSION['seat']) || $this->referer(null, true) !== '/reserves/seat' && $this->referer(null, true) !== '/reserves/ticket') {
+            $this->request->session()->delete('seat');
             return $this->redirect(['controller' => 'error']);
         }
         $this->viewBuilder()->setLayout('frame-title');
@@ -89,6 +91,7 @@ class ReservesController extends AppController
                 $_SESSION['detail']['fee_id'] = $this->request->data['detail'];
                 return $this->redirect(['controller' => 'reserves', 'action' => 'discount']);
             } elseif (empty($notSelectError) && $isTicketIdExist === false) { //開発者ツールにて$ticketId以外の値に変更して送信した時
+                $this->request->session()->delete('seat');
                 return $this->redirect(['controller' => 'error']);
             }
         }
@@ -99,6 +102,9 @@ class ReservesController extends AppController
     {
         //URL直打ち対策(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
         if (!(isset($_SESSION['detail']['fee_id'])) || $this->referer(null, true) !== '/reserves/ticket' && $this->referer(null, true) !== '/reserves/discount') {
+            $this->request->session()->delete('seat');
+            $this->request->session()->delete('detail');
+            $this->request->session()->delete('schedule');
             return $this->redirect(['controller' => 'error']);
         }
         $this->viewBuilder()->setLayout('frame-title');
@@ -144,6 +150,9 @@ class ReservesController extends AppController
                 $_SESSION['fee'] = $feeTicket;
                 return $this->redirect(['controller' => 'reserves', 'action' => 'checkdetail']);
             } elseif ($isTicketIdExist === false) {
+                $this->request->session()->delete('seat');
+                $this->request->session()->delete('detail');
+                $this->request->session()->delete('schedule');
                 return $this->redirect(['controller' => 'error']);
             }
         }
@@ -154,6 +163,10 @@ class ReservesController extends AppController
     {
         //直接画面遷移の対応(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
         if (!(isset($_SESSION['detail']['discount_id'])) || $this->referer(null, true) !== '/reserves/discount' && $this->referer(null, true) !== '/reserves/checkdetail') {
+            $this->request->session()->delete('seat');
+            $this->request->session()->delete('detail');
+            $this->request->session()->delete('schedule');
+            $this->request->session()->delete('fee');
             return $this->redirect(['controller' => 'error']);
         }
         $this->viewBuilder()->setLayout('frame-title');
@@ -195,6 +208,10 @@ class ReservesController extends AppController
                 $_SESSION['reservationDetails'] = 1; //paymentの直接画面遷移対策でセッション作成
                 return $this->redirect(['action' => 'payment']);
             } else {
+                $this->request->session()->delete('seat');
+                $this->request->session()->delete('schedule');
+                $this->request->session()->delete('detail');
+                $this->request->session()->delete('fee');
                 return $this->redirect(['controller' => 'error']);
             }
         }
