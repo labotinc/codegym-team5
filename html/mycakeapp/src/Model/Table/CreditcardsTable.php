@@ -79,12 +79,12 @@ class CreditcardsTable extends Table
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
             ->notEmptyString('name', '空白になっています')
-            ->add('name', 'ruleName', [
+            ->add('name', 'NotBlankOnly', [
                 'rule' => ['NotBlankOnly'],
                 'provider' => 'custom',
                 'message' => '空白になっています'
             ])
-            ->add('name', 'ruleName', [
+            ->add('name', 'HalfSizeAlphabetAndSpaceOnly', [
                 'rule' => ['HalfSizeAlphabetAndSpaceOnly'],
                 'provider' => 'custom',
                 'message' => '半角英字以外の文字が使われています'
