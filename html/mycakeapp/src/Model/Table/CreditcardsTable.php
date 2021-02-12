@@ -91,6 +91,8 @@ class CreditcardsTable extends Table
             ]);
 
         $validator
+            ->scalar('deadline')
+            ->maxLength('deadline', 5)
             ->requirePresence('deadline', 'create')
             ->notEmptyString('deadline', '空白になっています')
             ->add('deadline', 'NotBlankOnly', [
