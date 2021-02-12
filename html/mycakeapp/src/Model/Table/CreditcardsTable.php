@@ -91,14 +91,17 @@ class CreditcardsTable extends Table
             ]);
 
         $validator
-            ->integer('deadline')
             ->requirePresence('deadline', 'create')
-            ->integer('deadline', '半角数字以外の文字が使われています')
             ->notEmptyString('deadline', '空白になっています')
-            ->add('deadline', 'ruleName', [
+            ->add('deadline', 'NotBlankOnly', [
                 'rule' => ['NotBlankOnly'],
                 'provider' => 'custom',
                 'message' => '空白になっています'
+            ])
+            ->add('deadline', 'IsDeadline', [
+                'rule' => ['IsDeadline'],
+                'provider' => 'custom',
+                'message' => 'MM/YYで入力してください'
             ]);
 
         $validator
@@ -154,14 +157,44 @@ class CreditcardsTable extends Table
     }
     public function findAllCardNumbers(Query $query, array $options)
     {
-        $today = date('Ymd');
-        $allCardNumbersArray = $query->select(['card_number'])->where([
+        $allCardNumbersArray = $query->select(['card_number', 'deadline'])->where([
             'is_deleted' => 0,
-            'deadline >=' => $today
         ])->toArray();
-        foreach ($allCardNumbersArray as $allCardNumberArray) {
-            $allCardNumbers[] = $allCardNumberArray->card_number;
+        //date_parse_from_formatを使うと月の頭の0が消えるため月にintをかけている
+        $today = date('Y') . (int)date('m');
+        foreach ((array)$allCardNumbersArray as $allCardNumberArray) {
+            $deadlineInfo = date_parse_from_format('m/y', $allCardNumberArray->deadline);
+            $deadline = $deadlineInfo['year'] . $deadlineInfo['month'];
+            if ((int)$deadline > (int)$today) {
+                $allCardNumbers[] = $allCardNumberArray->card_number;
+            }
+        }
+        if (empty($allCardNumbers)) {
+            $allCardNumbers = array();
         }
         return $allCardNumbers;
+    }
+    public function findCardsInfoOwn(Query $query, array $options)
+    {
+        $registeredCardsInfoOwn = $query->select(['id', 'name', 'card_number', 'deadline'])
+            ->where([
+                'member_id' => $options['memberId'],
+                'is_deleted' => 0,
+            ])
+            ->order(['created_at' => 'asc'])
+            ->toArray();
+        //date_parse_from_formatを使うと月の頭の0が消えるため月にintをかけている
+        $today = date('Y') . (int)date('m');
+        foreach ((array)$registeredCardsInfoOwn as $registeredCardInfoOwn) {
+            $deadlineInfo = date_parse_from_format('m/y', $registeredCardInfoOwn->deadline);
+            $deadline = $deadlineInfo['year'] . $deadlineInfo['month'];
+            if ((int)$deadline > (int)$today) {
+                $cardsInfoOwn[] = $registeredCardInfoOwn;
+            }
+        }
+        if (empty($cardsInfoOwn)) {
+            $cardsInfoOwn = array();
+        }
+        return $cardsInfoOwn;
     }
 }

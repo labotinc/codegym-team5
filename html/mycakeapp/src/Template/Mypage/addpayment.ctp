@@ -21,7 +21,7 @@
     <div>
         <p>有効期限</p>
         <?php
-        echo $this->Form->deadline('deadline', ['placeholder' => '20001231']);
+        echo $this->Form->deadline('deadline', ['placeholder' => '月/年 例)12/22']);
         echo $this->Form->error('deadline');
         ?>
     </div>

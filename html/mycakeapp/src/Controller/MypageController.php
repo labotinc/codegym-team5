@@ -49,19 +49,10 @@ class MypageController extends AppController
     {
         $this->viewBuilder()->setLayout('frame-title');
         $memberId = $this->Auth->user('id');
-        $today = date('Ymd');
-        $cardsInfoOwn = $this->Creditcards->find()
-            ->select(['id', 'name', 'card_number', 'deadline'])
-            ->where([
-                'member_id' => $memberId,
-                'is_deleted' => 0,
-                'deadline >=' => $today
-            ])
-            ->order(['created_at' => 'asc'])
-            ->hydrate(false)->toArray();
+        $cardsInfoOwn = $this->Creditcards->find('CardsInfoOwn', ['memberId' => $memberId]);
         $securityKey = Configure::read('key');
         $securitySalt = Configure::read('salt');
-        foreach ($cardsInfoOwn as $key => $value) {
+        foreach ((array)$cardsInfoOwn as $key => $value) {
             $lastFourDigits = substr($value['card_number'], -4, 4);
             $encryptedCardId = Security::encrypt($value['id'], $securityKey, $securitySalt);
             $cardsInfoOwn[$key]['card_number'] = $lastFourDigits;
@@ -75,7 +66,7 @@ class MypageController extends AppController
         $this->viewBuilder()->setLayout('frame-title');
         $entity = $this->Creditcards->newEntity();
         $memberId = $this->Auth->user('id');
-        $today = date('Ymd');
+        $cardsInfoOwn = $this->Creditcards->find('CardsInfoOwn', ['memberId' => $memberId]);
         if (!empty($this->request->query['id'])) { //updateの$entity
             // 暗号化したクレジットカードIDを戻す
             $securityKey = Configure::read('key');
@@ -85,25 +76,18 @@ class MypageController extends AppController
             if ($cardId === false) { //不正なIDの時
                 return $this->redirect(['controller' => 'error']);
             }
-            $cardHolderIsMember = $this->Creditcards->find()
-                ->where([
-                    'id' => $cardId,
-                    'member_id' => $memberId,
-                    'is_deleted' => 0,
-                    'deadline >=' => $today
-                ])->count();
-            if (!($cardHolderIsMember)) { //カードがユーザーのものじゃない時
+            foreach ((array)$cardsInfoOwn as $cardInfoOwn) {
+                if ($cardInfoOwn['id'] === (int)$cardId) {
+                    $cardHolderIsMember = true;
+                }
+            }
+            if (empty($cardHolderIsMember)) { //カードがユーザーのものじゃない時
                 return $this->redirect(['controller' => 'error']);
             }
-
             $entity = $this->Creditcards->get($cardId);
             $previousCardNumber = $entity['card_number'];
         } else { //insertのカード数判定
-            $numberOfCardsOwned = $this->Creditcards->find()->where([
-                'member_id' => $this->Auth->user('id'),
-                'is_deleted' => 0,
-                'deadline >=' => $today
-            ])->count();
+            $numberOfCardsOwned = count($cardsInfoOwn);
             if ($numberOfCardsOwned === 2) {
                 return $this->redirect(['controller' => 'error']);
             }
@@ -163,14 +147,13 @@ class MypageController extends AppController
         if ($cardId === false) { //不正なIDの時
             return $this->redirect(['controller' => 'error']);
         }
-        $today = date('Ymd');
-        $cardHolderIsMember = $this->Creditcards->find()
-            ->where([
-                'id' => $cardId,
-                'member_id' => $this->Auth->user('id'),
-                'is_deleted' => 0,
-                'deadline >=' => $today
-            ])->count();
+        $memberId = $this->Auth->user('id');
+        $cardsInfoOwn = $this->Creditcards->find('CardsInfoOwn', ['memberId' => $memberId]);
+        foreach ((array)$cardsInfoOwn as $cardInfoOwn) {
+            if ($cardInfoOwn['id'] === (int)$cardId) {
+                $cardHolderIsMember = true;
+            }
+        }
         if (!($cardHolderIsMember)) {
             return $this->redirect(['controller' => 'error']);
         }

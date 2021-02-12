@@ -22,4 +22,22 @@ class CustomValidation extends Validation
     {
         return (bool)preg_match(" /^[a-zA-Z ]+$/", $value);
     }
+    public function IsDeadline($value)
+    {
+        $isDateFormat = (bool)preg_match(" /^[0-9]{2}\/[0-9]{2}$/", $value);
+        if ($isDateFormat === false) {
+            return false;
+        }
+        $thisYear = (int)date('y');
+        $thisMonth = (int)date('m');
+        $month = (int)substr($value, 0, 2);
+        $year = (int)substr($value, 3, 2);
+        if ($month > 12 || $year < $thisYear) {
+            return false;
+        }
+        if ($month <= $thisMonth && $year === $thisYear) {
+            return false;
+        }
+        return true;
+    }
 }
