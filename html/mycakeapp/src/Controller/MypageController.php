@@ -101,7 +101,7 @@ class MypageController extends AppController
                 $this->set(compact('cardNumberIsNotUnique'));
             }
             $entity["updated_at"] = date("Y/m/d H:i:s");
-            if ($this->Creditcards->save($entity) && empty($cardNumberIsNotUnique)) {
+            if (empty($cardNumberIsNotUnique) && $this->Creditcards->save($entity)) {
                 $_SESSION['addedpayment'] = 1;
                 return $this->redirect(['action' => 'addedpayment']);
             }
