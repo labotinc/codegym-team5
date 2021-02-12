@@ -35,7 +35,7 @@ class CustomValidation extends Validation
         if ($month > 12 || $year < $thisYear) {
             return false;
         }
-        if ($month <= $thisMonth && $year === $thisYear) {
+        if ($month < $thisMonth && $year === $thisYear) {
             return false;
         }
         return true;

@@ -167,7 +167,7 @@ class CreditcardsTable extends Table
         foreach ((array)$allCardNumbersArray as $allCardNumberArray) {
             $deadlineInfo = date_parse_from_format('m/y', $allCardNumberArray->deadline);
             $deadline = $deadlineInfo['year'] . $deadlineInfo['month'];
-            if ((int)$deadline > (int)$today) {
+            if ((int)$deadline >= (int)$today) {
                 $allCardNumbers[] = $allCardNumberArray->card_number;
             }
         }
@@ -190,7 +190,7 @@ class CreditcardsTable extends Table
         foreach ((array)$registeredCardsInfoOwn as $registeredCardInfoOwn) {
             $deadlineInfo = date_parse_from_format('m/y', $registeredCardInfoOwn->deadline);
             $deadline = $deadlineInfo['year'] . $deadlineInfo['month'];
-            if ((int)$deadline > (int)$today) {
+            if ((int)$deadline >= (int)$today) {
                 $cardsInfoOwn[] = $registeredCardInfoOwn;
             }
         }
