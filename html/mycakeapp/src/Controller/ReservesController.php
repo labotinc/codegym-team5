@@ -80,8 +80,9 @@ class ReservesController extends AppController
             if (empty($this->request->data['detail'])) { //何も選択しない状態で送信した時
                 $notSelectError = '※チケット種別を選択してください';
                 $this->set(compact('notSelectError'));
+            } else {
+                $isTicketIdExist = in_array($this->request->data['detail'], $ticketId);
             }
-            $isTicketIdExist = in_array($this->request->data['detail'], $ticketId);
             if (empty($notSelectError) && $isTicketIdExist === true) {
                 $_SESSION['schedule'] = $schedule;
                 $_SESSION['detail'] = $detail;
