@@ -93,8 +93,8 @@ class PointsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['member_id'], 'Members'));
-        $rules->add($rules->existsIn(['schedule_id'], 'Schedules'));
+        // $rules->add($rules->existsIn(['member_id'], 'Members'));
+        // $rules->add($rules->existsIn(['schedule_id'], 'Schedules'));
 
         return $rules;
     }
