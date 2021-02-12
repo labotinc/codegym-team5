@@ -72,7 +72,8 @@ class CreditcardsTable extends Table
             ->notEmptyString('name');
 
         $validator
-            ->integer('deadline')
+            ->scalar('deadline')
+            ->maxLength('deadline', 5)
             ->requirePresence('deadline', 'create')
             ->notEmptyString('deadline');
 

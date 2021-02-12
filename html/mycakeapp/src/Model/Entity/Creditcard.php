@@ -10,7 +10,7 @@ use Cake\ORM\Entity;
  * @property int $member_id
  * @property varbinary $card_number
  * @property string $name
- * @property int $deadline
+ * @property string $deadline
  * @property bool $is_deleted
  * @property \Cake\I18n\Time $created_at
  * @property \Cake\I18n\Time $updated_at
