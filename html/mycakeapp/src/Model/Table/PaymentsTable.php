@@ -119,4 +119,13 @@ class PaymentsTable extends Table
 
         return $rules;
     }
+    public function insert($entity)
+    { //saveの仕様が「レコードが存在する場合はupdateする」なので一意でない時はfalseを返すよう変更
+        $columnNumber = $entity['column_number'];
+        $recordNumber = $entity['record_number'];
+        if ($this->exists(['column_number' => $columnNumber, 'record_number' => $recordNumber])) {
+            return false;
+        }
+        return $this->save($entity);
+    }
 }
