@@ -68,6 +68,10 @@ class PointsTable extends Table
             ->notEmptyString('point');
 
         $validator
+            ->boolean('is_minus')
+            ->notEmptyString('is_minus');
+
+        $validator
             ->boolean('is_cancelled')
             ->notEmptyString('is_cancelled');
 
