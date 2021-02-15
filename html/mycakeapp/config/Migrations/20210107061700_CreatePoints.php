@@ -39,6 +39,10 @@ class CreatePoints extends AbstractMigration
             'limit' => 11,
             'null' => false,
         ]);
+        $table->addColumn('is_minus', 'boolean', [
+            'default' => 0,
+            'null' => false,
+        ]);
         $table->addColumn('is_cancelled', 'boolean', [
             'default' => 0,
             'null' => false,

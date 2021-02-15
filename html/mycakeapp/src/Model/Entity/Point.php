@@ -36,5 +36,6 @@ class Point extends Entity
         'updated_at' => true,
         'member' => true,
         'schedule' => true,
+        'is_minus' => true,
     ];
 }
