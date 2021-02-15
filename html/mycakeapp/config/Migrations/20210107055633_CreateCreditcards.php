@@ -29,9 +29,9 @@ class CreateCreditcards extends AbstractMigration
             'limit' => 100,
             'null' => false,
         ]);
-        $table->addColumn('deadline', 'integer', [
+        $table->addColumn('deadline', 'string', [
             'default' => null,
-            'limit' => 6,
+            'limit' => 5,
             'null' => false,
         ]);
         $table->addColumn('is_deleted', 'boolean', [

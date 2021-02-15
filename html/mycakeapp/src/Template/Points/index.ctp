@@ -25,6 +25,7 @@
                 <th scope="col"><?= $this->Paginator->sort('record_number') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('point') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('is_cancelled') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('is_minus') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created_at') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('updated_at') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>

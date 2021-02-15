@@ -13,7 +13,7 @@ class CreatePoints extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('points', ['id' => false, 'primary_key' => ['member_id', 'schedule_id', 'column_number', 'record_number']]);
+        $table = $this->table('points', ['id' => false, 'primary_key' => ['member_id', 'schedule_id', 'column_number', 'record_number','is_minus']]);
         $table->addColumn('member_id', 'integer', [
             'default' => null,
             'limit' => 11,
@@ -37,6 +37,10 @@ class CreatePoints extends AbstractMigration
         $table->addColumn('point', 'integer', [
             'default' => null,
             'limit' => 11,
+            'null' => false,
+        ]);
+        $table->addColumn('is_minus', 'boolean', [
+            'default' => 0,
             'null' => false,
         ]);
         $table->addColumn('is_cancelled', 'boolean', [

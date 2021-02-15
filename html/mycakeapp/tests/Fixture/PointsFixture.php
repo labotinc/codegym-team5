@@ -22,6 +22,7 @@ class PointsFixture extends TestFixture
         'record_number' => ['type' => 'string', 'length' => 2, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'point' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'is_cancelled' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
+        'is_minus' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
         'created_at' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'updated_at' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         '_constraints' => [
@@ -48,6 +49,7 @@ class PointsFixture extends TestFixture
                 'record_number' => '2a48fe82-7aaa-49ab-b220-da41b9066e64',
                 'point' => 1,
                 'is_cancelled' => 1,
+                'is_minus' => 1,
                 'created_at' => '2021-01-07 16:33:46',
                 'updated_at' => '2021-01-07 16:33:46',
             ],

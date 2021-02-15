@@ -134,6 +134,7 @@
                 <th scope="col"><?= __('Schedule Id') ?></th>
                 <th scope="col"><?= __('Point') ?></th>
                 <th scope="col"><?= __('Is Cancelled') ?></th>
+                <th scope="col"><?= __('Is Minus') ?></th>
                 <th scope="col"><?= __('Created At') ?></th>
                 <th scope="col"><?= __('Updated At') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>

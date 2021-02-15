@@ -21,6 +21,7 @@
         <?php
             echo $this->Form->control('point');
             echo $this->Form->control('is_cancelled');
+            echo $this->Form->control('is_minus');
             echo $this->Form->control('created_at');
             echo $this->Form->control('updated_at');
         ?>

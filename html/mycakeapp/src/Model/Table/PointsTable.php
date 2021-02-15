@@ -36,7 +36,7 @@ class PointsTable extends Table
 
         $this->setTable('points');
         $this->setDisplayField('member_id');
-        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number']);
+        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number','is_minus']);
 
         $this->belongsTo('Payments', [
             'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
@@ -66,6 +66,10 @@ class PointsTable extends Table
             ->integer('point')
             ->requirePresence('point', 'create')
             ->notEmptyString('point');
+
+        $validator
+            ->boolean('is_minus')
+            ->notEmptyString('is_minus');
 
         $validator
             ->boolean('is_cancelled')

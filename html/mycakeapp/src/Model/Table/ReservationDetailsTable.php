@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -111,7 +112,6 @@ class ReservationDetailsTable extends Table
         $rules->add($rules->existsIn(['member_id'], 'Members'));
         $rules->add($rules->existsIn(['schedule_id'], 'Schedules'));
         $rules->add($rules->existsIn(['fee_id'], 'Fees'));
-        $rules->add($rules->existsIn(['discount_id'], 'Discounts'));
 
         return $rules;
     }

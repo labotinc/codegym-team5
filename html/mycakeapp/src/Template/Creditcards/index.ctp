@@ -37,7 +37,7 @@
                 <td><?= $creditcard->has('member') ? $this->Html->link($creditcard->member->id, ['controller' => 'Members', 'action' => 'view', $creditcard->member->id]) : '' ?></td>
                 <td><?= h($creditcard->card_number) ?></td>
                 <td><?= h($creditcard->name) ?></td>
-                <td><?= $this->Number->format($creditcard->deadline) ?></td>
+                <td><?= h($creditcard->deadline) ?></td>
                 <td><?= h($creditcard->is_deleted) ?></td>
                 <td><?= h($creditcard->created_at) ?></td>
                 <td><?= h($creditcard->updated_at) ?></td>

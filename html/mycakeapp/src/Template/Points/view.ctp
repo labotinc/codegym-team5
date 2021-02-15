@@ -53,5 +53,9 @@
             <th scope="row"><?= __('Is Cancelled') ?></th>
             <td><?= $point->is_cancelled ? __('Yes') : __('No'); ?></td>
         </tr>
+        <tr>
+            <th scope="row"><?= __('Is Minus') ?></th>
+            <td><?= $point->is_cancelled ? __('Yes') : __('No'); ?></td>
+        </tr>
     </table>
 </div>
