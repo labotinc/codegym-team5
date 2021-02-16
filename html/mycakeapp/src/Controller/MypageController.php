@@ -203,15 +203,34 @@ class MypageController extends AppController
         $seatReservation = $this->SeatReservations->find()
             ->where($mainKey)
             ->toArray();
-        $point = $this->Points->find()
+        //予約によって付与されたポイント
+        $plusPoint = $this->Points->find()
             ->where($mainKey)
+            ->andwhere(['is_minus' => 0])
+            ->toArray();
+        //予約時に使用したポイント
+        $minusPoint = $this->Points->find()
+            ->where($mainKey)
+            ->andwhere(['is_minus' => 1])
             ->toArray();
         //ポイントを使用していた場合は使用分のポイントをmembersテーブルに戻す
-        if (!empty($point[0])) {
+        if (!empty($plusPoint[0]) || !empty($minusPoint[0])) {
             $member = $this->Members->get($memberId);
-            $member['total_point'] -= $point[0]['point'];
-            $point[0]['is_cancelled'] = 1;
-            if (!($this->Members->save($member)) || !($this->Points->save($point[0]))) {
+            if (!empty($plusPoint[0])) {
+                $member['total_point'] -= $plusPoint[0]['point'];
+                $plusPoint[0]['is_cancelled'] = 1;
+                if (!($this->Points->save($plusPoint[0]))) {
+                    return $this->redirect(['controller' => 'error']);
+                }
+            }
+            if (!empty($minusPoint[0])) {
+                $member['total_point'] += $minusPoint[0]['point'];
+                $minusPoint[0]['is_cancelled'] = 1;
+                if (!($this->Points->save($minusPoint[0]))) {
+                    return $this->redirect(['controller' => 'error']);
+                }
+            }
+            if (!($this->Members->save($member))) {
                 return $this->redirect(['controller' => 'error']);
             }
         }
