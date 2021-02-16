@@ -1,4 +1,3 @@
-checkpayment.ctp
 <?php echo $this->Html->css('checkpayment(reserve'); ?>
 <div class="sub-total">
     <div class="flex">
