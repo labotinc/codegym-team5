@@ -140,20 +140,22 @@ class MypageController extends AppController
         //ポイントを使用していた場合は使用分のポイントをmembersテーブルに戻す
         if (!empty($plusPoint[0]) || !empty($minusPoint[0])) {
             $member = $this->Members->get($memberId);
-            if (!empty($plusPoint[0])) {
-                $member['total_point'] -= $plusPoint[0]['point'];
-                $plusPoint[0]['is_cancelled'] = 1;
-                if (!($this->Points->save($plusPoint[0]))) {
-                    return $this->redirect(['controller' => 'error']);
-                }
+        }
+        if (!empty($plusPoint[0])) {
+            $member['total_point'] -= $plusPoint[0]['point'];
+            $plusPoint[0]['is_cancelled'] = 1;
+            if (!($this->Points->save($plusPoint[0]))) {
+                return $this->redirect(['controller' => 'error']);
             }
-            if (!empty($minusPoint[0])) {
-                $member['total_point'] += $minusPoint[0]['point'];
-                $minusPoint[0]['is_cancelled'] = 1;
-                if (!($this->Points->save($minusPoint[0]))) {
-                    return $this->redirect(['controller' => 'error']);
-                }
+        }
+        if (!empty($minusPoint[0])) {
+            $member['total_point'] += $minusPoint[0]['point'];
+            $minusPoint[0]['is_cancelled'] = 1;
+            if (!($this->Points->save($minusPoint[0]))) {
+                return $this->redirect(['controller' => 'error']);
             }
+        }
+        if (!empty($plusPoint[0]) || !empty($minusPoint[0])) {
             if (!($this->Members->save($member))) {
                 return $this->redirect(['controller' => 'error']);
             }
