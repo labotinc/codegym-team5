@@ -78,20 +78,15 @@ class MypageController extends AppController
                 'payment' => $reservedList->purchase_price,
                 'scheduleId' => $reservedList->schedule_id
             );
+            $detail = $detailContents;
+            if ($reservedList->reservation_detail->discount_id !== 0) {
+                $discount = $this->Discounts->get($reservedList->reservation_detail->discount_id);
+                $detail['discountName'] = $discount->name;
+            }
             if ($reservedList->schedule_id === $i) {
-                $detail = $detailContents;
-                if ($reservedList->reservation_detail->discount_id !== 0) {
-                    $discount = $this->Discounts->get($reservedList->reservation_detail->discount_id);
-                    $detail['discountName'] = $discount->name;
-                }
                 $reserved[$j][] = $detail;
                 unset($detail);
             } elseif ($reservedList->schedule_id !== $i) {
-                $detail = $detailContents;
-                if ($reservedList->reservation_detail->discount_id !== 0) {
-                    $discount = $this->Discounts->get($reservedList->reservation_detail->discount_id);
-                    $detail['discountName'] = $discount->name;
-                }
                 $j++;
                 $reserved[$j][] = $detail;
                 unset($detail);
