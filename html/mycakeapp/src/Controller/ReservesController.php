@@ -274,7 +274,7 @@ class ReservesController extends AppController
             $totalOfOwnPoints = $amountOfPayment;
         }
 
-        if ($this->request->is('post')) {
+        if ($this->request->is('post') && $reserve->execute($this->request->data)) {
             // カード
             $registeredOrder = $this->request->data['registered_order']; //カードを登録した順番(1番目、2番目)
             if ($registeredOrder > 2) { //不正なカードの時(2枚以上登録できないはず)
@@ -295,7 +295,7 @@ class ReservesController extends AppController
                 $TooManyPointsError = '利用できるポイント以下の数字を入力してください';
                 $this->set(compact('TooManyPointsError'));
             }
-            if ($reserve->execute($this->request->data) && empty($TooManyPointsError)) { //バリデーションOKなら保存
+            if (empty($TooManyPointsError)) {
                 $_SESSION['payment']['creditcard_id'] = $useCreditcard;
                 $_SESSION['payment']['use_point'] = $usePoint;
                 return $this->redirect(['action' => 'checkpayment']);
