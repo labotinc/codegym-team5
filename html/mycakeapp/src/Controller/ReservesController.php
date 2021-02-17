@@ -335,7 +335,9 @@ class ReservesController extends AppController
         } else {
             $subTotal = $fee - $useDiscountDetail['displayed_amount'] - $usePoint;
         }
-        $taxRate = $this->Taxes->find()->select(['tax_rate'])->where(['id' => 1])->first()->tax_rate;
+        $taxRate = $this->Taxes->find()->select(['tax_rate'])->where([
+            'started_at <=' => $screeningStartDate, 'OR' => [['finished_at >=' => $screeningStartDate], ['finished_at IS NULL']],
+        ])->first()->tax_rate;
         $tax = floor($subTotal * ($taxRate / 100));
         $purchasePrice = $subTotal + $tax;
 
@@ -357,7 +359,9 @@ class ReservesController extends AppController
                 'created_at' => $today,
                 'updated_at' => $today
             ];
-            $pointRate = $this->PointRates->find()->select(['point_rate'])->where(['id' => 1])->first()->point_rate;
+            $pointRate = $this->PointRates->find()->select(['point_rate'])->where([
+                'started_at <=' => $screeningStartDate, 'OR' => [['finished_at >=' => $screeningStartDate], ['finished_at IS NULL']],
+            ])->first()->point_rate;
             $givePoint = floor($purchasePrice * ($pointRate / 100));
             $points = [
                 [ //usePoints
