@@ -36,7 +36,7 @@ class PointsTable extends Table
 
         $this->setTable('points');
         $this->setDisplayField('member_id');
-        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number','is_minus']);
+        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number', 'is_minus']);
 
         $this->belongsTo('Payments', [
             'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
@@ -101,5 +101,25 @@ class PointsTable extends Table
         // $rules->add($rules->existsIn(['schedule_id'], 'Schedules'));
 
         return $rules;
+    }
+
+    public function findApplyPointEntity(Query $query, array $options)
+    {
+        $mainKey = $options['mainKey'];
+        $isMinus = $options['is_minus'];
+
+        return $query
+            ->where($mainKey)
+            ->andwhere(['is_minus' => $isMinus])
+            ->select([
+                'member_id',
+                'schedule_id',
+                'column_number',
+                'record_number',
+                'point',
+                'is_minus',
+                'is_cancelled',
+            ])
+            ->toArray();
     }
 }
