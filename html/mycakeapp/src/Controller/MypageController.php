@@ -108,6 +108,13 @@ class MypageController extends AppController
         $scheduleId = $this->request->query['id'];
         $column = $this->request->query['column'];
         $record = $this->request->query['record'];
+        $mainKey = [
+            'member_id' => $memberId,
+            'schedule_id' => $scheduleId,
+            'column_number' => $column,
+            'record_number' => $record,
+            'is_cancelled' => 0,
+        ];
         //開発者ツールによるid及びテキストを変更し、ユーザーが予約している情報以外の値を入力した時にエラーへ遷移させる。
         //偶然開発者ツールの変更によりログインユーザーが予約していた別の映画情報を合致した時は考慮しない。
         $loginUserPayments = $this->Payments->find('ReservedLists', ['memberId' => $memberId]);
@@ -119,17 +126,10 @@ class MypageController extends AppController
         $isScheduleIdExist = in_array($scheduleId, $reservedSchedule);
         $isColumnExist = in_array($column, $reservedColumn);
         $isRecordExist = in_array($record, $reservedRecord);
-        if ($isScheduleIdExist === false || $isColumnExist === false || $isRecordExist === false) {
+        if ($isScheduleIdExist === false || $isColumnExist === false || $isRecordExist === false || !($this->Payments->exists($mainKey))) {
             return $this->redirect(['controller' => 'error']);
         }
         //各テーブルの該当箇所を抽出
-        $mainKey = [
-            'member_id' => $memberId,
-            'schedule_id' => $scheduleId,
-            'column_number' => $column,
-            'record_number' => $record,
-            'is_cancelled' => 0,
-        ];
         $payment = $this->Payments->find('ApplyEntity', ['mainKey' => $mainKey]);
         $reservationDetail = $this->ReservationDetails->find('ApplyEntity', ['mainKey' => $mainKey]);
         $seatReservation = $this->SeatReservations->find('ApplyEntity', ['mainKey' => $mainKey]);
