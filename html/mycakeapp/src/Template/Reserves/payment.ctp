@@ -34,7 +34,7 @@
 </div>
 <div class="flex division-button">
     <?php
-    echo $this->Html->link('キャンセル', ['action' => 'checkdetail'], ['class' => 'button normal-button back-gray']);
+    echo $this->Html->link('戻る', ['action' => 'checkdetail'], ['class' => 'button normal-button back-gray']);
     echo $this->Form->button('決定', ['class' => 'normal-button back-orange']);
     ?>
 </div>

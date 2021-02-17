@@ -31,7 +31,7 @@
 </div>
 <div class="flex division-button">
     <?php
-    echo $this->Html->link('キャンセル', ['action' => 'payment'], ['class' => 'button normal-button back-gray']);
+    echo $this->Html->link('戻る', ['action' => 'payment'], ['class' => 'button normal-button back-gray']);
     echo $this->Form->postLink('決済', '#', ['class' => 'button normal-button back-orange']);
     ?>
 </div>
