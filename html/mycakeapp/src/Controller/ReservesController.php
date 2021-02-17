@@ -239,8 +239,7 @@ class ReservesController extends AppController
         $_SESSION['column_number'] = 'A';
         $_SESSION['record_number'] = 4;
         $_SESSION['fee'] = 1800;
-        $_SESSION['displayed_amount'] = 300;
-        $_SESSION['discount_name'] = 'レディースデイ割引';
+        $_SESSION['discount_id'] = 0;
         $_SESSION['checkdetail'] = 1;
         if (empty($_SESSION['checkdetail'])) {
             return $this->redirect(['controller' => 'error']);
@@ -260,7 +259,17 @@ class ReservesController extends AppController
 
         $totalOfOwnPoints = $this->Members->find()
             ->select(['total_point'])->where(['id' => $memberId])->first()->total_point;
-        $amountOfPayment = $_SESSION['fee'] - $_SESSION['displayed_amount'];
+        $screeningStartDate = $this->Schedules->find()->select(['start_date'])->where(['id' => $_SESSION['schedule_id']])->first()->start_date;
+        $useDiscountDetail = $this->Discounts->find('UseDiscountDetail', ['start_date' => $screeningStartDate]);
+        if (!(isset($useDiscountDetail))) {
+            $useDiscountDetail['displayed_amount'] = 0;
+            $noUseDiscount = true;
+        }
+        if (!(isset($noUseDiscount)) && $useDiscountDetail['is_minus'] === false) {
+            $amountOfPayment = $useDiscountDetail['displayed_amount'];
+        } else {
+            $amountOfPayment = $_SESSION['fee'] - $useDiscountDetail['displayed_amount'];
+        }
         if ($totalOfOwnPoints > $amountOfPayment) { //所持ポイント>支払額
             $totalOfOwnPoints = $amountOfPayment;
         }
@@ -304,15 +313,28 @@ class ReservesController extends AppController
             return $this->redirect(['controller' => 'error']);
         }
         $fee = $_SESSION['fee'];
-        $discountName = $_SESSION['discount_name'];
-
+        $screeningStartDate = $this->Schedules->find()->select(['start_date'])->where(['id' => $_SESSION['schedule_id']])->first()->start_date;
+        $useDiscountDetail = $this->Discounts->find('UseDiscountDetail', ['start_date' => $screeningStartDate]);
+        if (isset($useDiscountDetail)) {
+            $discountName = $useDiscountDetail['name'];
+        } else {
+            $discountName = null;
+            $useDiscountDetail['displayed_amount'] = 0;
+            $noUseDiscount = true;
+        }
         $securityKey = Configure::read('key');
         $securitySalt = Configure::read('salt');
         $useCreditcard = Security::decrypt($_SESSION['payment']['creditcard_id'], $securityKey, $securitySalt);
 
-        $displayedAmount = $_SESSION['displayed_amount'];
+        $displayedAmount = $useDiscountDetail['displayed_amount'];
+
         $usePoint = $_SESSION['payment']['use_point'];
-        $subTotal = $fee - $displayedAmount - $usePoint;
+        // is_minusが立ってるかで処理を変える
+        if (!(isset($noUseDiscount)) && $useDiscountDetail['is_minus'] === false) {
+            $subTotal = $useDiscountDetail['displayed_amount'] - $usePoint;
+        } else {
+            $subTotal = $fee - $useDiscountDetail['displayed_amount'] - $usePoint;
+        }
         $taxRate = $this->Taxes->find()->select(['tax_rate'])->where(['id' => 1])->first()->tax_rate;
         $tax = floor($subTotal * ($taxRate / 100));
         $purchasePrice = $subTotal + $tax;
