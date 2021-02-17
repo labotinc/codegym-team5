@@ -276,8 +276,8 @@ class ReservesController extends AppController
 
         if ($this->request->is('post') && $reserve->execute($this->request->data)) {
             // カード
-            $registeredOrder = $this->request->data['registered_order']; //カードを登録した順番(1番目、2番目)
-            if ($registeredOrder > 2) { //不正なカードの時(2枚以上登録できないはず)
+            $registeredOrder = (int)$this->request->data['registered_order']; //カードを登録した順番(1番目、2番目)
+            if ($registeredOrder >= count($cardsInfoOwn)) { //不正なカードの時
                 $this->request->session()->delete('checkdetail');
                 $this->request->session()->delete('payment');
                 return $this->redirect(['controller' => 'error']);
