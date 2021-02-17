@@ -336,7 +336,7 @@ class ReservesController extends AppController
                 'updated_at' => $today
             ];
             $pointRate = $this->PointRates->find()->select(['point_rate'])->where(['id' => 1])->first()->point_rate;
-            $givePoint = ($fee * ($pointRate / 100));
+            $givePoint = floor($purchasePrice * ($pointRate / 100));
             $points = [
                 [ //usePoints
                     'member_id' => (int)$memberId,
