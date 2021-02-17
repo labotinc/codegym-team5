@@ -247,6 +247,10 @@ class ReservesController extends AppController
         }
 
         $cardsInfoOwn = $this->Creditcards->find('CardsInfoOwn', ['memberId' => $memberId]);
+        if (!($cardsInfoOwn)) {
+            //決済新規登録ページへ
+            return $this->redirect(['controller' => 'mypage', 'action' => 'addpayment']);
+        }
         // カードIDの暗号化 カード下4桁抽出
         $securityKey = Configure::read('key');
         $securitySalt = Configure::read('salt');
