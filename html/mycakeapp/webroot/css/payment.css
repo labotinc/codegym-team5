@@ -16,6 +16,7 @@ label input {
 }
 .cardInfo div {
     padding: 20px 0 22px;
+    cursor: pointer;
 }
 .cardInfo div p:first-child {
     padding-bottom: 3px;
