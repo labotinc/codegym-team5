@@ -111,6 +111,9 @@ class ReservesController extends AppController
 
     public function discount()
     {
+        if (!empty($_SESSION['checkdetail'])) {
+            $this->request->session()->delete('checkdetail');
+        }
         //URL直打ち対策(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
         if (!(isset($_SESSION['detail']['fee_id'])) || $this->referer(null, true) !== '/reserves/ticket' && $this->referer(null, true) !== '/reserves/discount') {
             $this->request->session()->delete('seat');
@@ -172,6 +175,47 @@ class ReservesController extends AppController
 
     public function checkdetail()
     {
+        $memberId = $this->Auth->user('id');
+        $mainKey = [
+            'member_id' => $memberId,
+            'schedule_id' => $_SESSION['schedule_id'],
+            'column_number' => $_SESSION['column_number'],
+            'record_number' => $_SESSION['record_number'],
+        ];
+        $reservationDetails = $this->ReservationDetails->find('ReservationDetails', ['mainKey' => $mainKey]);
+        if (!empty($_SESSION['checkdetail'])) {
+            $mainKey = [
+                'member_id' => $memberId,
+                'schedule_id' => $_SESSION['schedule_id'],
+                'column_number' => $_SESSION['column_number'],
+                'record_number' => $_SESSION['record_number'],
+            ];
+            $reservationDetails = $this->ReservationDetails->find('ReservationDetails', ['mainKey' => $mainKey]);
+            $reservationDetails[0]['is_cancelled'] = 1;
+            if (!($this->ReservationDetails->save($reservationDetails[0]))) {
+                $this->request->session()->delete('seat');
+                return $this->redirect(['controller' => 'error']);
+            }
+            $movieDetails = $this->Schedules->find('MovieDetails', ['schedule_id' => $reservationDetails[0]['schedule_id']]);
+            $_SESSION['detail'] = [
+                'movieTitle' => $movieDetails->movie->name,
+                'date' => $movieDetails->movie->date,
+                'week' => $movieDetails->movie->week,
+                'startTime' => $movieDetails->movie->start_time,
+                'finishTime' => $movieDetails->movie->finish_time,
+                'seatColumn' => $reservationDetails[0]['column_number'],
+                'seatRecord' => $reservationDetails[0]['record_number'],
+                'fee_id' => $reservationDetails[0]['fee_id'],
+                'discount_id' => $reservationDetails[0]['discount_id'],
+            ];
+            $_SESSION['seat'] = [
+                'member_id' => $memberId,
+                'schedule_id' => $reservationDetails[0]['schedule_id'],
+                'column_number' => $reservationDetails[0]['column_number'],
+                'record_number' => $reservationDetails[0]['record_number'],
+            ];
+            $_SESSION['fee'] = $this->Fees->get($_SESSION['detail']['fee_id']);
+        }
         //直接画面遷移の対応(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
         if (!(isset($_SESSION['detail']['discount_id'])) || $this->referer(null, true) !== '/reserves/discount' && $this->referer(null, true) !== '/reserves/checkdetail') {
             $this->request->session()->delete('seat');
@@ -184,7 +228,7 @@ class ReservesController extends AppController
         $detail = $_SESSION['detail'];
         $feeTicket = $_SESSION['fee'];
         $title = '予約確認';
-        if ($_SESSION['detail']['discount_id'] !== '0') { //該当なしを選択していない場合
+        if ((string)$_SESSION['detail']['discount_id'] !== '0') { //該当なしを選択していない場合
             $discountTicket = $this->Discounts->get($_SESSION['detail']['discount_id']);
         }
         if (!empty($discountTicket) && (int)$discountTicket->is_minus === 1) {
@@ -237,7 +281,7 @@ class ReservesController extends AppController
 
         $_SESSION['schedule_id'] = 1;
         $_SESSION['column_number'] = 'A';
-        $_SESSION['record_number'] = 4;
+        $_SESSION['record_number'] = 1;
         $_SESSION['fee'] = 1800;
         $_SESSION['discount_id'] = 0;
         $_SESSION['checkdetail'] = 1;
