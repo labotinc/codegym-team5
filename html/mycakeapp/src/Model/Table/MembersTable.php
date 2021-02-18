@@ -170,8 +170,15 @@ class MembersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['email'], 'このメールアドレスはすでに利用されています'));
+        $rules->add($rules->isUnique(['email','is_delete'], 'このメールアドレスはすでに利用されています'));
 
         return $rules;
+    }
+
+    public function findAuth(\Cake\ORM\Query $query, array $options)
+    {
+        $query->where(['Members.is_deleted' => 0]);
+
+        return $query;
     }
 }
