@@ -1,0 +1,42 @@
+.seat_heading {
+    color: #707070;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.seat_heading h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.seat_heading h2 {
+    font-size: 18px;
+}
+.seat_heading span {
+    font-size: 14px;
+}
+.seat_select {
+    width: 496px;
+    margin: 0 auto;
+    color: #707070;
+    margin-bottom: 50px;
+}
+.seat_select li {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 4px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.seat_select button {
+    height: 24px;
+    width: 24px;
+}
+.seat_select p {
+    font-size: 13px;
+    line-height: 24px;
+    width: 24px;
+}
+
+div.content.flex {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}

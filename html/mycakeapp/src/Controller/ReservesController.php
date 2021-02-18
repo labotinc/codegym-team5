@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 class ReservesController extends AppController
 {
@@ -22,6 +23,10 @@ class ReservesController extends AppController
 
     public function seat()
     {
+        //URL直打ち対策
+        if (empty($_SESSION['schedule_id'])) {
+            return $this->redirect(['controller' => 'error']);
+        }
         if (!empty($_SESSION['seat'])) { //ticketアクションから戻ってきたときにキャンセルフラグを立てる
             $seatReservation = $this->SeatReservations->find()
                 ->where([
@@ -38,6 +43,22 @@ class ReservesController extends AppController
             }
             $this->request->session()->delete('seat');
         }
+        //シアターファイル名を取得
+        $seatDetails = $this->Schedules->get($_SESSION['schedule_id'], [
+            'contain' => ['Movies', 'Theaters']
+        ]);
+        //２時間前までの席予約情報を取得
+        $seatReservations = $this->SeatReservations->find()
+            ->where(['schedule_id' => $_SESSION['schedule_id']])
+            ->andWhere(['is_cancelld' => 0])
+            ->andWhere(['created_at >=' => new Time('2 hours ago')]);
+        //予約済み情報を取得
+        $Reservations = $this->ReservationDetails->find()
+            ->where(['schedule_id' => $_SESSION['schedule_id']])
+            ->andWhere(['is_cancelled' => 0]);
+        $this->viewBuilder()->setLayout('frame-title');
+        $title = '座席指定';
+        $this->set(compact('title', 'seatDetails', 'seatReservations', 'Reservations'));
     }
 
     public function ticket()
