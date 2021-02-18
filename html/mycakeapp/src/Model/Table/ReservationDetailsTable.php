@@ -115,4 +115,20 @@ class ReservationDetailsTable extends Table
 
         return $rules;
     }
+
+    public function findApplyEntity(Query $query, array $options)
+    {
+        $mainKey = $options['mainKey'];
+
+        return $query
+            ->where($mainKey)
+            ->select([
+                'member_id',
+                'schedule_id',
+                'column_number',
+                'record_number',
+                'is_cancelled',
+            ])
+            ->toArray();
+    }
 }
