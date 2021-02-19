@@ -54,6 +54,7 @@ class AppController extends Controller
                 'Form' => [
                     'fields' => ['username' => 'email', 'password' => 'password'],
                     'userModel' => 'Members',
+                    'finder' => 'Auth',
                 ]
             ],
             'loginAction' => ['controller' => 'Members', 'action' => 'login'],
