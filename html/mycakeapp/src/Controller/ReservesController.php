@@ -176,13 +176,6 @@ class ReservesController extends AppController
     public function checkdetail()
     {
         $memberId = $this->Auth->user('id');
-        $mainKey = [
-            'member_id' => $memberId,
-            'schedule_id' => $_SESSION['schedule_id'],
-            'column_number' => $_SESSION['column_number'],
-            'record_number' => $_SESSION['record_number'],
-        ];
-        $reservationDetails = $this->ReservationDetails->find('ReservationDetails', ['mainKey' => $mainKey]);
         if (!empty($_SESSION['checkdetail'])) {
             $mainKey = [
                 'member_id' => $memberId,
@@ -287,7 +280,6 @@ class ReservesController extends AppController
         $_SESSION['checkdetail'] = 1;
         if (empty($_SESSION['checkdetail'])) {
             return $this->redirect(['controller' => 'error']);
-            $this->request->session()->delete('checkdetail');
         }
 
         $cardsInfoOwn = $this->Creditcards->find('CardsInfoOwn', ['memberId' => $memberId]);
