@@ -210,7 +210,8 @@ class ReservesController extends AppController
             $_SESSION['fee'] = $this->Fees->get($_SESSION['detail']['fee_id']);
         }
         //直接画面遷移の対応(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
-        if (!(isset($_SESSION['detail']['discount_id'])) || $this->referer(null, true) !== '/reserves/discount' && $this->referer(null, true) !== '/reserves/checkdetail') {
+        $isIllegalReferences = $this->referer(null, true) !== '/reserves/discount' && $this->referer(null, true) !== '/reserves/checkdetail' && $this->referer(null, true) !== '/reserves/payment';
+        if (!(isset($_SESSION['detail']['discount_id'])) || $isIllegalReferences) {
             $this->request->session()->delete('seat');
             $this->request->session()->delete('detail');
             $this->request->session()->delete('schedule');
