@@ -1,0 +1,102 @@
+.credit-card {
+    flex-direction: column;
+}
+form > p {
+    padding-top: 53px;
+}
+label {
+    border: 0.5px solid #adadad;
+    border-radius: 5px;
+    width: 368px;
+    height: 88px;
+    margin-top: 10px;
+}
+label input {
+    margin: 32px 24px;
+}
+.cardInfo div {
+    padding: 20px 0 22px;
+    cursor: pointer;
+}
+.cardInfo div p:first-child {
+    padding-bottom: 3px;
+}
+.point {
+    padding: 21px 0 30px;
+}
+.point div {
+    padding-top: 10px;
+}
+.point input {
+    width: 144px;
+    height: 48px;
+    border: 0.5px solid #adadad;
+    border-radius: 5px;
+}
+select {
+    width: 200px;
+    height: 48px;
+    margin-right: 24px;
+    font-size: 16px;
+    padding-left: 20px;
+    border: 0.5px solid #adadad;
+    border-radius: 5px;
+}
+.division-button {
+    padding-bottom: 80px;
+}
+.error-message {
+    padding-top: 6px;
+    color: #f46161;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+}
+.error-message:not(:first-child),
+.error-message li:not(:first-child) {
+    padding-top: 5px;
+}
+input[type='radio'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    position: relative;
+    top: 25px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    vertical-align: -0.6rem;
+    transition:all .15s ease-out 0s;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    margin: .4rem;
+    outline: none;
+    border-radius: 10%;
+  }
+  input[type=radio] {
+    border-radius: 50%;
+  }
+  input[type=radio]:checked:before {
+    transform: scale(1);
+  }
+  input[type=radio]:before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 3px;
+    transform: scale(0);
+    transition: all ease-out 250ms;
+  }
+  input[type=radio] {
+    border: 2px solid #F5AE0B;
+  }
+  input[type=radio]:checked:before {
+    background: #F5AE0B;
+  }

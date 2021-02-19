@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
+use App\Form\ReserveForm;
+use Cake\Utility\Security;
+use Cake\Core\Configure;
 
 class ReservesController extends AppController
 {
@@ -14,6 +18,13 @@ class ReservesController extends AppController
         $this->loadModel('ReservationDetails');
         $this->loadModel('Fees');
         $this->loadModel('Discounts');
+        $this->loadModel('Creditcards');
+        $this->loadModel('Members');
+        $this->loadModel('Payments');
+        $this->loadModel('Points');
+        $this->loadModel('PointRates');
+        $this->loadModel('Taxes');
+
         $member = $this->Auth->user();
         if (empty($member) && $this->request->action !== 'seat') {
             return $this->redirect(['controller' => 'error']);
@@ -100,6 +111,9 @@ class ReservesController extends AppController
 
     public function discount()
     {
+        if (!empty($_SESSION['checkdetail'])) {
+            $this->request->session()->delete('checkdetail');
+        }
         //URL直打ち対策(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
         if (!(isset($_SESSION['detail']['fee_id'])) || $this->referer(null, true) !== '/reserves/ticket' && $this->referer(null, true) !== '/reserves/discount') {
             $this->request->session()->delete('seat');
@@ -161,8 +175,43 @@ class ReservesController extends AppController
 
     public function checkdetail()
     {
+        $memberId = $this->Auth->user('id');
+        if (!empty($_SESSION['checkdetail'])) {
+            $mainKey = [
+                'member_id' => $memberId,
+                'schedule_id' => $_SESSION['schedule_id'],
+                'column_number' => $_SESSION['column_number'],
+                'record_number' => $_SESSION['record_number'],
+            ];
+            $reservationDetails = $this->ReservationDetails->find('ReservationDetails', ['mainKey' => $mainKey]);
+            $reservationDetails[0]['is_cancelled'] = 1;
+            if (!($this->ReservationDetails->save($reservationDetails[0]))) {
+                $this->request->session()->delete('seat');
+                return $this->redirect(['controller' => 'error']);
+            }
+            $movieDetails = $this->Schedules->find('MovieDetails', ['schedule_id' => $reservationDetails[0]['schedule_id']]);
+            $_SESSION['detail'] = [
+                'movieTitle' => $movieDetails->movie->name,
+                'date' => $movieDetails->movie->date,
+                'week' => $movieDetails->movie->week,
+                'startTime' => $movieDetails->movie->start_time,
+                'finishTime' => $movieDetails->movie->finish_time,
+                'seatColumn' => $reservationDetails[0]['column_number'],
+                'seatRecord' => $reservationDetails[0]['record_number'],
+                'fee_id' => $reservationDetails[0]['fee_id'],
+                'discount_id' => $reservationDetails[0]['discount_id'],
+            ];
+            $_SESSION['seat'] = [
+                'member_id' => $memberId,
+                'schedule_id' => $reservationDetails[0]['schedule_id'],
+                'column_number' => $reservationDetails[0]['column_number'],
+                'record_number' => $reservationDetails[0]['record_number'],
+            ];
+            $_SESSION['fee'] = $this->Fees->get($_SESSION['detail']['fee_id']);
+        }
         //直接画面遷移の対応(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
-        if (!(isset($_SESSION['detail']['discount_id'])) || $this->referer(null, true) !== '/reserves/discount' && $this->referer(null, true) !== '/reserves/checkdetail') {
+        $isIllegalReferences = $this->referer(null, true) !== '/reserves/discount' && $this->referer(null, true) !== '/reserves/checkdetail' && $this->referer(null, true) !== '/reserves/payment';
+        if (!(isset($_SESSION['detail']['discount_id'])) || $isIllegalReferences) {
             $this->request->session()->delete('seat');
             $this->request->session()->delete('detail');
             $this->request->session()->delete('schedule');
@@ -173,7 +222,7 @@ class ReservesController extends AppController
         $detail = $_SESSION['detail'];
         $feeTicket = $_SESSION['fee'];
         $title = '予約確認';
-        if ($_SESSION['detail']['discount_id'] !== '0') { //該当なしを選択していない場合
+        if ((string)$_SESSION['detail']['discount_id'] !== '0') { //該当なしを選択していない場合
             $discountTicket = $this->Discounts->get($_SESSION['detail']['discount_id']);
         }
         if (!empty($discountTicket) && (int)$discountTicket->is_minus === 1) {
@@ -216,5 +265,193 @@ class ReservesController extends AppController
             }
         }
         $this->set(compact('title', 'detail', 'feeTicket'));
+    }
+    public function payment()
+    {
+        $this->viewBuilder()->setLayout('frame-title');
+        $title = '決済方法';
+        $memberId = $this->Auth->user('id');
+        $reserve = new ReserveForm(); //validation
+
+        $_SESSION['schedule_id'] = 1;
+        $_SESSION['column_number'] = 'A';
+        $_SESSION['record_number'] = 1;
+        $_SESSION['fee'] = 1800;
+        $_SESSION['discount_id'] = 0;
+        $_SESSION['checkdetail'] = 1;
+        if (empty($_SESSION['checkdetail'])) {
+            return $this->redirect(['controller' => 'error']);
+        }
+
+        $cardsInfoOwn = $this->Creditcards->find('CardsInfoOwn', ['memberId' => $memberId]);
+        if (!($cardsInfoOwn)) {
+            //決済新規登録ページへ
+            return $this->redirect(['controller' => 'mypage', 'action' => 'addpayment']);
+        }
+        // カードIDの暗号化 カード下4桁抽出
+        $securityKey = Configure::read('key');
+        $securitySalt = Configure::read('salt');
+        foreach ($cardsInfoOwn as $key => $value) {
+            $lastFourDigits = substr($value['card_number'], -4, 4);
+            $encryptedCardId = Security::encrypt($value['id'], $securityKey, $securitySalt);
+            $cardsInfoOwn[$key]['card_number'] = $lastFourDigits;
+            $cardsInfoOwn[$key]['id'] = $encryptedCardId;
+        }
+
+        $totalOfOwnPoints = $this->Members->find()
+            ->select(['total_point'])->where(['id' => $memberId])->first()->total_point;
+        $screeningStartDate = $this->Schedules->find()->select(['start_date'])->where(['id' => $_SESSION['schedule_id']])->first()->start_date;
+        $useDiscountDetail = $this->Discounts->find('UseDiscountDetail', ['start_date' => $screeningStartDate]);
+        if (!(isset($useDiscountDetail))) {
+            $useDiscountDetail['displayed_amount'] = 0;
+            $noUseDiscount = true;
+        }
+        if (!(isset($noUseDiscount)) && $useDiscountDetail['is_minus'] === false) {
+            $amountOfPayment = $useDiscountDetail['displayed_amount'];
+        } else {
+            $amountOfPayment = $_SESSION['fee'] - $useDiscountDetail['displayed_amount'];
+        }
+        if ($totalOfOwnPoints > $amountOfPayment) { //所持ポイント>支払額
+            $totalOfOwnPoints = $amountOfPayment;
+        }
+
+        if ($this->request->is('post') && $reserve->execute($this->request->data)) {
+            // カード
+            $registeredOrder = (int)$this->request->data['registered_order']; //カードを登録した順番(1番目、2番目)
+            if ($registeredOrder >= count($cardsInfoOwn)) { //不正なカードの時
+                $this->request->session()->delete('checkdetail');
+                $this->request->session()->delete('payment');
+                return $this->redirect(['controller' => 'error']);
+            }
+            $useCreditcard = $cardsInfoOwn[$registeredOrder]['id'];
+            // ポイント
+            $usageOfPoints = $this->request->data['usage_of_points'];
+            if ($usageOfPoints === 'no_use_point') {
+                $_SESSION['payment']['creditcard_id'] = $useCreditcard;
+                $_SESSION['payment']['use_point'] = 0;
+                return $this->redirect(['action' => 'checkpayment']);
+            }
+            $usePoint = $this->request->data['use_point'];
+            if ($usePoint > $totalOfOwnPoints) {
+                $TooManyPointsError = '利用できるポイント以下の数字を入力してください';
+                $this->set(compact('TooManyPointsError'));
+            }
+            if (empty($TooManyPointsError)) {
+                $_SESSION['payment']['creditcard_id'] = $useCreditcard;
+                $_SESSION['payment']['use_point'] = $usePoint;
+                return $this->redirect(['action' => 'checkpayment']);
+            }
+        }
+        $this->set(compact('title', 'reserve', 'cardsInfoOwn', 'totalOfOwnPoints'));
+    }
+    public function checkpayment()
+    {
+        $this->viewBuilder()->setLayout('frame-title');
+        $title = '決済概要';
+        if (empty($_SESSION['payment'])) {
+            $this->request->session()->delete('checkdetail');
+            $this->request->session()->delete('payment');
+            return $this->redirect(['controller' => 'error']);
+        }
+        $fee = $_SESSION['fee'];
+        $screeningStartDate = $this->Schedules->find()->select(['start_date'])->where(['id' => $_SESSION['schedule_id']])->first()->start_date;
+        $useDiscountDetail = $this->Discounts->find('UseDiscountDetail', ['start_date' => $screeningStartDate]);
+        if (isset($useDiscountDetail)) {
+            $discountName = $useDiscountDetail['name'];
+        } else {
+            $discountName = null;
+            $useDiscountDetail['displayed_amount'] = 0;
+            $noUseDiscount = true;
+        }
+        $securityKey = Configure::read('key');
+        $securitySalt = Configure::read('salt');
+        $useCreditcard = Security::decrypt($_SESSION['payment']['creditcard_id'], $securityKey, $securitySalt);
+
+        $displayedAmount = $useDiscountDetail['displayed_amount'];
+
+        $usePoint = $_SESSION['payment']['use_point'];
+        // is_minusが立ってるかで処理を変える
+        if (!(isset($noUseDiscount)) && $useDiscountDetail['is_minus'] === false) {
+            $subTotal = $useDiscountDetail['displayed_amount'] - $usePoint;
+        } else {
+            $subTotal = $fee - $useDiscountDetail['displayed_amount'] - $usePoint;
+        }
+        $taxRate = $this->Taxes->find()->select(['tax_rate'])->where([
+            'started_at <=' => $screeningStartDate, 'OR' => [['finished_at >=' => $screeningStartDate], ['finished_at IS NULL']],
+        ])->first()->tax_rate;
+        $tax = floor($subTotal * ($taxRate / 100));
+        $purchasePrice = $subTotal + $tax;
+
+        $this->set(compact('fee', 'discountName', 'displayedAmount', 'subTotal', 'tax', 'purchasePrice'));
+
+        $paymentsEntity = $this->Payments->newEntity();
+        if ($this->request->is('post')) {
+            $today = Time::now();
+            $memberId = $this->Auth->user('id');
+
+            $payments = [
+                'member_id' => (int)$memberId,
+                'schedule_id' => (int)$_SESSION['schedule_id'],
+                'column_number' => $_SESSION['column_number'],
+                'record_number' => $_SESSION['record_number'],
+                'creditcard_id' => $useCreditcard,
+                'purchase_price' => (int)$purchasePrice,
+                'is_cancelled' => 0,
+                'created_at' => $today,
+                'updated_at' => $today
+            ];
+            $pointRate = $this->PointRates->find()->select(['point_rate'])->where([
+                'started_at <=' => $screeningStartDate, 'OR' => [['finished_at >=' => $screeningStartDate], ['finished_at IS NULL']],
+            ])->first()->point_rate;
+            $givePoint = floor($purchasePrice * ($pointRate / 100));
+            $points = [
+                [ //usePoints
+                    'member_id' => (int)$memberId,
+                    'schedule_id' => (int)$_SESSION['schedule_id'],
+                    'column_number' => $_SESSION['column_number'],
+                    'record_number' => $_SESSION['record_number'],
+                    'point' => (int)$_SESSION['payment']['use_point'],
+                    'is_minus' => 1,
+                    'is_cancelled' => 0,
+                    'created_at' => $today,
+                    'updated_at' => $today,
+                ],
+                [ //givePoints
+                    'member_id' => (int)$memberId,
+                    'schedule_id' => (int)$_SESSION['schedule_id'],
+                    'column_number' => $_SESSION['column_number'],
+                    'record_number' => $_SESSION['record_number'],
+                    'point' => (int)$givePoint,
+                    'is_minus' => (int)0,
+                    'is_cancelled' => 0,
+                    'created_at' => $today,
+                    'updated_at' => $today,
+                ],
+            ];
+            $PointsEntity = $this->Points->newEntities($points);
+            $payments = $this->Payments->patchEntity($paymentsEntity, $payments);
+            $membersEntity = $this->Members->get($memberId);
+            $totalOfOwnPoints = $this->Members->find()
+                ->select(['total_point'])->where(['id' => $memberId])->first()->total_point;
+            $membersEntity['total_point'] = $totalOfOwnPoints - $_SESSION['payment']['use_point'] + $givePoint;
+            if ($this->Payments->insert($payments) && $this->Points->saveMany($PointsEntity, [['checkExisting' => false]]) && $this->Members->save($membersEntity)) {
+                return $this->redirect(['action' => 'finished']);
+            } else {
+                return $this->redirect(['controller' => 'error']);
+            }
+        }
+        $usePoint = $_SESSION['payment']['use_point'];
+        $this->set(compact('title', 'usePoint'));
+    }
+    public function finished()
+    {
+        $this->viewBuilder()->setLayout('frame-no-title');
+        if (empty($_SESSION['payment'])) {
+            $this->request->session()->delete('checkdetail');
+            $this->request->session()->delete('payment');
+            return $this->redirect(['controller' => 'error']);
+        }
+        $this->request->session()->delete('checkdetail');
+        $this->request->session()->delete('payment');
     }
 }

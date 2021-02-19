@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -107,5 +108,14 @@ class SchedulesTable extends Table
         $rules->add($rules->existsIn(['theater_id'], 'Theaters'));
 
         return $rules;
+    }
+    public function findMovieDetails(Query $query, array $options)
+    {
+        return $query->contain('Movies')
+            ->select([
+                'Movies.name',
+                'Movies.started_at',
+                'Movies.screening_time',
+            ])->where(['Schedules.id' => $options['schedule_id']])->first();
     }
 }

@@ -115,7 +115,11 @@ class ReservationDetailsTable extends Table
 
         return $rules;
     }
-
+    public function findReservationDetails(Query $query, array $options)
+    {
+        $mainKey = $options['mainKey'];
+        return $query->where($mainKey)->toArray();
+    }
     public function findApplyEntity(Query $query, array $options)
     {
         $mainKey = $options['mainKey'];

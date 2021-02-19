@@ -33,6 +33,9 @@ class MypageController extends AppController
         $id = $this->Auth->user('id');
         $loginMember = $this->Members->findById($id)->toArray();
         $title = 'マイページ';
+        if (isset($_SESSION['checkdetail'])) { //決済方法から来たのか判定するためのセッションを消す
+            $this->request->session()->delete('checkdetail');
+        }
         $this->set(compact('title', 'loginMember'));
     }
     public function delete()
@@ -243,6 +246,10 @@ class MypageController extends AppController
                 $entity["updated_at"] = date("Y/m/d H:i:s");
                 if ($this->Creditcards->save($entity) && empty($cardNumberIsNotUnique)) {
                     $_SESSION['addedpayment'] = 1;
+                }
+                if (isset($_SESSION['checkdetail']) && isset($_SESSION['addedpayment'])) { // 決済方法から来たならセッションがある
+                    return $this->redirect(['controller' => 'reserves', 'action' => 'payment']);
+                } elseif (!(isset($_SESSION['checkdetail'])) && isset($_SESSION['addedpayment'])) {
                     return $this->redirect(['action' => 'addedpayment']);
                 }
             }

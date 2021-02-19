@@ -32,7 +32,11 @@ class Payment extends Entity
      * @var array
      */
     protected $_accessible = [
+        'member_id' => true,
+        'schedule_id' => true,
         'creditcard_id' => true,
+        'column_number' => true,
+        'record_number' => true,
         'purchase_price' => true,
         'is_cancelled' => true,
         'created_at' => true,

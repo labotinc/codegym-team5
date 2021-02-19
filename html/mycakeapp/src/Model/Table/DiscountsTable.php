@@ -111,4 +111,17 @@ class DiscountsTable extends Table
 
         return $validator;
     }
+    public function findUseDiscountDetail(Query $query, array $options)
+    {
+        $useDiscountSql = $query
+            ->select(['displayed_amount', 'name', 'is_minus'])
+            ->where([
+                'id' => $_SESSION['discount_id'],
+                'started_at <=' => $options['start_date'],
+                'OR' => [['finished_at >=' => $options['start_date']], ['finished_at IS NULL']],
+                'is_deleted' => 0,
+
+            ])->hydrate(false)->first();
+        return $useDiscountSql;
+    }
 }
