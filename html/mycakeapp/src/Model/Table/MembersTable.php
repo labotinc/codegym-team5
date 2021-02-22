@@ -170,7 +170,7 @@ class MembersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['email','is_delete'], 'このメールアドレスはすでに利用されています'));
+        $rules->add($rules->isUnique(['email','is_deleted'], 'このメールアドレスはすでに利用されています'));
 
         return $rules;
     }
