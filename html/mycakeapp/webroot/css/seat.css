@@ -31,13 +31,13 @@
     width: 24px;
 }
 .seat_select button:not([class], [disabled]):hover {
-    background-color: #ffcc00;
+    background-color: gray;
 }
 .seat_select button.selected {
     background-color: #ffcc00;
 }
 .seat_select button:disabled {
-    background-color: #262626;
+    background-color: gray;
 }
 .seat_select button:disabled::before {
     content: "×";
