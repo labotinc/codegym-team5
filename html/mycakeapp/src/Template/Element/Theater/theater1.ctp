@@ -1,136 +1,30 @@
+<?php
+//　補足：管理者画面作成時には値を変更することで対応可能
+$record_name = [1, 2, 3, 4, 5, 6, 7, 8];
+$column_name = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+?>
+
 <ul>
     <li>
-        <p></p>
-        <p>A</p>
-        <p>B</p>
-        <p>C</p>
-        <p>D</p>
-        <p>E</p>
-        <p>F</p>
-        <p>G</p>
-        <p>H</p>
-        <p>I</p>
-        <p>J</p>
-        <p>K</p>
+        <p></p> <!-- gridでの左上の空白 -->
+        <?php
+        //カラムヘッダー出力
+        for ($i = 0; $i < count($column_name); $i++) {
+            echo '<p>' . $column_name[$i] . '</p>';
+        }
+        ?>
     </li>
-    <li>
-        <p>1</p>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <p>1</p>
-    </li>
-    <li>
-        <p>2</p>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <p>2</p>
-    </li>
-    <li>
-        <p>3</p>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <p>3</p>
-    </li>
-    <li>
-        <p>4</p>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <p>4</p>
-    </li>
-    <li>
-        <p>5</p>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <p>5</p>
-    </li>
-    <li>
-        <p>6</p>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <p>6</p>
-    </li>
-    <li>
-        <p>7</p>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <p>7</p>
-    </li>
-    <li>
-        <p>8</p>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <p>8</p>
-    </li>
+    <?php
+    // レコードヘッダーと席のボタン出力
+    for ($j = 0; $j < count($record_name); $j++) {
+        echo '<li>';
+        echo '<p>' . $record_name[$j] . '</p>';
+        for ($k = 0; $k < count($column_name); $k++) {
+            $seat_value = $column_name[$k] . '-' . $record_name[$j];
+            echo '<button type="button" value="' . $seat_value . '"></button>';
+        }
+        echo '<p>' . $column_name[$j] . '</p>';
+        echo '<li>';
+    }
+    ?>
 </ul>

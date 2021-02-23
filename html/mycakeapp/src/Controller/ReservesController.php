@@ -28,7 +28,7 @@ class ReservesController extends AppController
             return $this->redirect(['controller' => 'error']);
         }
         if (!empty($_SESSION['seat'])) { //ticketアクションから戻ってきたときにキャンセルフラグを立てる
-            $seatReservation = $this->SeatReservations->find()
+            $ExReservation = $this->SeatReservations->find()
                 ->where([
                     'member_id' => $_SESSION['seat']['member_id'],
                     'schedule_id' => $_SESSION['seat']['schedule_id'],
@@ -36,8 +36,8 @@ class ReservesController extends AppController
                     'record_number' => $_SESSION['seat']['record_number'],
                 ])
                 ->toArray();
-            $seatReservation[0]['is_cancelled'] = '1';
-            if (!($this->SeatReservations->save($seatReservation['0']))) {
+            $ExReservation[0]['is_cancelled'] = '1';
+            if (!($this->SeatReservations->save($ExReservation['0']))) {
                 $this->request->session()->delete('seat');
                 return $this->redirect(['controller' => 'error']);
             }
@@ -50,15 +50,21 @@ class ReservesController extends AppController
         //２時間前までの席予約情報を取得
         $seatReservations = $this->SeatReservations->find()
             ->where(['schedule_id' => $_SESSION['schedule_id']])
-            ->andWhere(['is_cancelld' => 0])
+            ->andWhere(['is_cancelled' => 0])
             ->andWhere(['created_at >=' => new Time('2 hours ago')]);
+        foreach ($seatReservations as $seatReservation) {
+            $Resaveted[] = $seatReservation['column_number'] . '-' . $seatReservation['record_number'];
+        }
         //予約済み情報を取得
         $Reservations = $this->ReservationDetails->find()
             ->where(['schedule_id' => $_SESSION['schedule_id']])
             ->andWhere(['is_cancelled' => 0]);
+        foreach ($Reservations as $Resavation) {
+            $Resaveted[] = $Resavation['column_number'] . '-' . $Resavation['record_number'];
+        }
         $this->viewBuilder()->setLayout('frame-title');
         $title = '座席指定';
-        $this->set(compact('title', 'seatDetails', 'seatReservations', 'Reservations'));
+        $this->set(compact('title', 'seatDetails', 'Resaveted'));
     }
 
     public function ticket()

@@ -30,6 +30,24 @@
     height: 24px;
     width: 24px;
 }
+.seat_select button:not([class], [disabled]):hover {
+    background-color: #ffcc00;
+}
+.seat_select button.selected {
+    background-color: #ffcc00;
+}
+.seat_select button:disabled {
+    background-color: #262626;
+}
+.seat_select button:disabled::before {
+    content: "×";
+    color: white;
+    display: block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+}
 .seat_select p {
     font-size: 13px;
     line-height: 24px;
