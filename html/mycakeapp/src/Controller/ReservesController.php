@@ -33,6 +33,8 @@ class ReservesController extends AppController
 
     public function seat()
     {
+        // $_SESSION['ticket']があるとき
+        // ticketから戻った時,seatに必要なセッションを引き継ぐ
         if (!empty($_SESSION['seat'])) { //ticketアクションから戻ってきたときにキャンセルフラグを立てる
             $seatReservation = $this->SeatReservations->find()
                 ->where([
@@ -49,6 +51,13 @@ class ReservesController extends AppController
             }
             $this->request->session()->delete('seat');
         }
+        // 座席予約完了した時の処理
+        // SeatReservationsテーブルに予約を保存した後$_SESSION['seat']を格納
+        // $_SESSION['seat'] = [
+        //     'schedule_id' => 1,
+        //     'column_number' => 'A',
+        //     'record_number' => 1,
+        // ];
     }
 
     public function ticket()
@@ -63,6 +72,9 @@ class ReservesController extends AppController
         if (empty($_SESSION['seat']) || $this->referer(null, true) !== '/reserves/seat' && $this->referer(null, true) !== '/reserves/ticket') {
             $this->request->session()->delete('seat');
             return $this->redirect(['controller' => 'error']);
+        } else {
+            // ticketからseatに戻った時の判定に使用
+            // $_SESSION['ticket'] = 1;
         }
         $this->viewBuilder()->setLayout('frame-title');
         $title = 'チケット種別';
@@ -179,9 +191,9 @@ class ReservesController extends AppController
         if (!empty($_SESSION['checkdetail'])) {
             $mainKey = [
                 'member_id' => $memberId,
-                'schedule_id' => $_SESSION['schedule_id'],
-                'column_number' => $_SESSION['column_number'],
-                'record_number' => $_SESSION['record_number'],
+                'schedule_id' => $_SESSION['payment']['schedule_id'],
+                'column_number' => $_SESSION['payment']['column_number'],
+                'record_number' => $_SESSION['payment']['record_number'],
             ];
             $reservationDetails = $this->ReservationDetails->find('ReservationDetails', ['mainKey' => $mainKey]);
             $reservationDetails[0]['is_cancelled'] = 1;
@@ -250,11 +262,17 @@ class ReservesController extends AppController
             $entity["created_at"] = date("Y/m/d H:i:s");
             $entity["updated_at"] = date("Y/m/d H:i:s");
             if ($this->ReservationDetails->save($entity)) {
+                $_SESSION['payment'] = [
+                    'schedule_id' => $_SESSION['seat']['schedule_id'],
+                    'column_number' => $_SESSION['seat']['column_number'],
+                    'record_number' => $_SESSION['seat']['record_number'],
+                    'fee' => $feeTicket->fee,
+                    'discount_id' => $_SESSION['detail']['discount_id'],
+                ];
                 $this->request->session()->delete('seat');
                 $this->request->session()->delete('schedule');
                 $this->request->session()->delete('detail');
                 $this->request->session()->delete('fee');
-                $_SESSION['reservationDetails'] = 1; //paymentの直接画面遷移対策でセッション作成
                 return $this->redirect(['action' => 'payment']);
             } else {
                 $this->request->session()->delete('seat');
@@ -273,14 +291,10 @@ class ReservesController extends AppController
         $memberId = $this->Auth->user('id');
         $reserve = new ReserveForm(); //validation
 
-        $_SESSION['schedule_id'] = 1;
-        $_SESSION['column_number'] = 'A';
-        $_SESSION['record_number'] = 1;
-        $_SESSION['fee'] = 1800;
-        $_SESSION['discount_id'] = 0;
-        $_SESSION['checkdetail'] = 1;
-        if (empty($_SESSION['checkdetail'])) {
+        if (empty($_SESSION['payment'])) {
             return $this->redirect(['controller' => 'error']);
+        } else {
+            $_SESSION['checkdetail'] = 1;
         }
 
         $cardsInfoOwn = $this->Creditcards->find('CardsInfoOwn', ['memberId' => $memberId]);
@@ -300,7 +314,7 @@ class ReservesController extends AppController
 
         $totalOfOwnPoints = $this->Members->find()
             ->select(['total_point'])->where(['id' => $memberId])->first()->total_point;
-        $screeningStartDate = $this->Schedules->find()->select(['start_date'])->where(['id' => $_SESSION['schedule_id']])->first()->start_date;
+        $screeningStartDate = $this->Schedules->find()->select(['start_date'])->where(['id' => $_SESSION['payment']['schedule_id']])->first()->start_date;
         $useDiscountDetail = $this->Discounts->find('UseDiscountDetail', ['start_date' => $screeningStartDate]);
         if (!(isset($useDiscountDetail))) {
             $useDiscountDetail['displayed_amount'] = 0;
@@ -309,7 +323,7 @@ class ReservesController extends AppController
         if (!(isset($noUseDiscount)) && $useDiscountDetail['is_minus'] === false) {
             $amountOfPayment = $useDiscountDetail['displayed_amount'];
         } else {
-            $amountOfPayment = $_SESSION['fee'] - $useDiscountDetail['displayed_amount'];
+            $amountOfPayment = $_SESSION['payment']['fee'] - $useDiscountDetail['displayed_amount'];
         }
         if ($totalOfOwnPoints > $amountOfPayment) { //所持ポイント>支払額
             $totalOfOwnPoints = $amountOfPayment;
@@ -353,8 +367,8 @@ class ReservesController extends AppController
             $this->request->session()->delete('payment');
             return $this->redirect(['controller' => 'error']);
         }
-        $fee = $_SESSION['fee'];
-        $screeningStartDate = $this->Schedules->find()->select(['start_date'])->where(['id' => $_SESSION['schedule_id']])->first()->start_date;
+        $fee = $_SESSION['payment']['fee'];
+        $screeningStartDate = $this->Schedules->find()->select(['start_date'])->where(['id' => $_SESSION['payment']['schedule_id']])->first()->start_date;
         $useDiscountDetail = $this->Discounts->find('UseDiscountDetail', ['start_date' => $screeningStartDate]);
         if (isset($useDiscountDetail)) {
             $discountName = $useDiscountDetail['name'];
@@ -407,7 +421,7 @@ class ReservesController extends AppController
             $points = [
                 [ //usePoints
                     'member_id' => (int)$memberId,
-                    'schedule_id' => (int)$_SESSION['schedule_id'],
+                    'schedule_id' => (int)$_SESSION['payment']['schedule_id'],
                     'column_number' => $_SESSION['column_number'],
                     'record_number' => $_SESSION['record_number'],
                     'point' => (int)$_SESSION['payment']['use_point'],
