@@ -26,35 +26,47 @@
     text-align: center;
     margin-bottom: 10px;
 }
-.seat_select button {
-    height: 24px;
-    width: 24px;
-}
-.seat_select button:not([class], [disabled]):hover {
-    background-color: gray;
-}
-.seat_select button.selected {
-    background-color: #ffcc00;
-}
-.seat_select button:disabled {
-    background-color: gray;
-}
-.seat_select button:disabled::before {
-    content: "×";
-    color: white;
-    display: block;
-    position: relative;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-}
 .seat_select p {
     font-size: 13px;
     line-height: 24px;
     width: 24px;
 }
-
-div.content.flex {
+.seat_select input[type="checkbox"] {
+    height: 24px;
+    width: 24px;
+    display: none;
+}
+.seat_select label {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    position: relative;
+}
+.seat_select label::before {
+    background-color: #707070;
+    content: "";
+    display: block;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+}
+.seat_select .reserved::before {
+    background-color: black;
+    content: "×";
+    color: white;
+    line-height: 24px;
+}
+.seat_select .selected::before {
+    background-color: #ffcc00;
+}
+.seat_select label:not(.selected):hover::before {
+    background-color: #909090;
+}
+button[type="submit"]:disabled {
+    background-color: gray;
+}
+div.content {
     padding-top: 30px;
     padding-bottom: 30px;
 }

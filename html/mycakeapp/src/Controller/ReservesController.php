@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Datasource\EntityInterface;
 use Cake\I18n\Time;
 
 class ReservesController extends AppController
@@ -43,6 +44,22 @@ class ReservesController extends AppController
             }
             $this->request->session()->delete('seat');
         }
+        if ($this->request->isPost()) {
+            $seatNumber = explode("-", $_POST['seat']);
+            $entity = $this->SeatReservations->newEntity();
+            $entity['member_id'] = $this->Auth->user('id');
+            $entity['schedule_id'] = $_SESSION['schedule_id'];
+            $entity['column_number'] = $seatNumber[0];
+            $entity['record_number'] = $seatNumber[1];
+            if ($this->SeatReservations->save($entity)) {
+                $_SESSION['seat']['member_id'] = $this->Auth->user('id');
+                $_SESSION['seat']['schedule_id'] = $_SESSION['schedule_id'];
+                $_SESSION['seat']['column_number'] = $seatNumber[0];
+                $_SESSION['seat']['record_number'] = $seatNumber[1];
+                $this->redirect(['action' => 'ticket']);
+            }
+            $this->redirect(['controller' => 'error']);
+        }
         //シアターファイル名を取得
         $seatDetails = $this->Schedules->get($_SESSION['schedule_id'], [
             'contain' => ['Movies', 'Theaters']
@@ -53,7 +70,7 @@ class ReservesController extends AppController
             ->andWhere(['is_cancelled' => 0])
             ->andWhere(['created_at >=' => new Time('2 hours ago')]);
         foreach ($seatReservations as $seatReservation) {
-            $Resaveted[] = $seatReservation['column_number'] . '-' . $seatReservation['record_number'];
+            $Reserved[] = $seatReservation['column_number'] . '-' . $seatReservation['record_number'];
         }
         //予約済み情報を取得
         $Reservations = $this->ReservationDetails->find()
@@ -64,17 +81,11 @@ class ReservesController extends AppController
         }
         $this->viewBuilder()->setLayout('frame-title');
         $title = '座席指定';
-        $this->set(compact('title', 'seatDetails', 'Resaveted'));
+        $this->set(compact('title', 'seatDetails', 'Reserved'));
     }
 
     public function ticket()
     {
-        //座席予約から以下の4つの項目が渡されている前提(座席確保機能完成時に消す)
-        $_SESSION['seat']['member_id'] = 1;
-        $_SESSION['seat']['schedule_id'] = 1;
-        $_SESSION['seat']['column_number'] = 'A';
-        $_SESSION['seat']['record_number'] = 1;
-
         //URL直打ち対策(途中でページを遷移したことによりセッションは残っていた場合も直接遷移させない)
         if (empty($_SESSION['seat']) || $this->referer(null, true) !== '/reserves/seat' && $this->referer(null, true) !== '/reserves/ticket') {
             $this->request->session()->delete('seat');

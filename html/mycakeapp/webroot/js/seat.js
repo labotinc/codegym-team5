@@ -1,21 +1,25 @@
 //予約済みのbutonにdisabled属性を追加
 $(document).ready(function(){
-    if(typeof Resaveted != 'undefined'){
-        for(var i = 0; i < Object.keys(Resaveted).length; i++){
-            $('button[value="' + Resaveted[i] + '"]').prop('disabled', true);
+    //予約済みのbutonにdisabled属性を追加
+    if(typeof Reserved != 'undefined'){
+        for(var i = 0; i < Object.keys(Reserved).length; i++){
+            console.log(Reserved);
+            $('#' + Reserved[i]).prop('disabled', true);
+            $('label[for=' + Reserved[i] + ']').addClass('reserved');
         }
     }
 });
 
-//座席のbutton挙動
-$('button').click(function(){
-    console.log(Resaveted);
+// 座席のbutton挙動
+$('input[type="checkbox"]').click(function(){
     if($(this).hasClass('selected')){
-        $(this).removeClass('selected');
-    }else if($(this).hasClass('reserved')){
-        none;
+        $('.selected').removeClass('selected');
+        $('button[type=submit]').prop('disabled', true);
     }else{
         $('.selected').removeClass('selected');
         $(this).addClass('selected');
+        $selectedId = $(this).attr('id');
+        $('label[for=' + $selectedId + ']').addClass('selected');
+        $('button[type=submit]').prop('disabled', false);
     }
 });

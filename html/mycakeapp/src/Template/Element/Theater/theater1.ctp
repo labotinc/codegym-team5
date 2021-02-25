@@ -21,9 +21,15 @@ $column_name = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
         echo '<p>' . $record_name[$j] . '</p>';
         for ($k = 0; $k < count($column_name); $k++) {
             $seat_value = $column_name[$k] . '-' . $record_name[$j];
-            echo '<button type="button" value="' . $seat_value . '"></button>';
+            echo $this->Form->checkbox('', [
+                'value' => $seat_value,
+                'name' => 'seat',
+                'id' => $seat_value,
+                'hiddenField' => false
+            ]);
+            echo "<label for=" . $seat_value . "></label>";
         }
-        echo '<p>' . $column_name[$j] . '</p>';
+        echo '<p>' . $record_name[$j] . '</p>';
         echo '<li>';
     }
     ?>
