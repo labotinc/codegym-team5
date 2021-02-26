@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -101,5 +102,21 @@ class SeatReservationsTable extends Table
         $rules->add($rules->existsIn(['schedule_id'], 'Schedules'));
 
         return $rules;
+    }
+
+    public function findApplyEntity(Query $query, array $options)
+    {
+        $mainKey = $options['mainKey'];
+
+        return $query
+            ->where($mainKey)
+            ->select([
+                'member_id',
+                'schedule_id',
+                'column_number',
+                'record_number',
+                'is_cancelled',
+            ])
+            ->toArray();
     }
 }

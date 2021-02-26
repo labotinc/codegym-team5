@@ -36,8 +36,16 @@ class PointsTable extends Table
 
         $this->setTable('points');
         $this->setDisplayField('member_id');
-        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number','is_minus']);
+        $this->setPrimaryKey(['member_id', 'schedule_id', 'column_number', 'record_number', 'is_minus']);
 
+        $this->belongsTo('Members', [
+            'foreignKey' => 'member_id',
+            'joinType' => 'INNER',
+        ]);
+        $this->belongsTo('Schedules', [
+            'foreignKey' => 'schedule_id',
+            'joinType' => 'INNER',
+        ]);
         $this->belongsTo('Payments', [
             'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
             'joinType' => 'INNER',
@@ -97,9 +105,29 @@ class PointsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['member_id'], 'Members'));
-        $rules->add($rules->existsIn(['schedule_id'], 'Schedules'));
+        // $rules->add($rules->existsIn(['member_id'], 'Members'));
+        // $rules->add($rules->existsIn(['schedule_id'], 'Schedules'));
 
         return $rules;
+    }
+
+    public function findApplyPointEntity(Query $query, array $options)
+    {
+        $mainKey = $options['mainKey'];
+        $isMinus = $options['is_minus'];
+
+        return $query
+            ->where($mainKey)
+            ->andwhere(['is_minus' => $isMinus])
+            ->select([
+                'member_id',
+                'schedule_id',
+                'column_number',
+                'record_number',
+                'point',
+                'is_minus',
+                'is_cancelled',
+            ])
+            ->toArray();
     }
 }

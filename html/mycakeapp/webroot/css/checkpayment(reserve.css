@@ -1,0 +1,26 @@
+.content {
+    height: 500px;
+}
+.sub-total {
+    padding: 64px 0 50px;
+}
+.sub-total .flex {
+    justify-content: space-between;
+    width: 368px;
+    height: 24px;
+    padding-bottom: 16px;
+}
+.sub-total .flex > * {
+    padding: 5px 8px 7px 15px;
+}
+.sub-total .flex:last-child {
+    padding-top: 16px;
+}
+.divider {
+    background-color: #707070;
+    width: 368px;
+    height: 1px;
+}
+.reduction {
+    color: #f5ae0b;
+}

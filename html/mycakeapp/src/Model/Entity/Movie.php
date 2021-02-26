@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
@@ -44,4 +45,21 @@ class Movie extends Entity
         'schedules' => true,
         'slideshow_pictures' => true,
     ];
+    protected function _getDate()
+    {
+        return $this->started_at->format('n月j日');
+    }
+    protected function _getWeek()
+    {
+        $week = ['日', '月', '火', '水', '木', '金', '土'];
+        return $week[$this->started_at->format('w')];
+    }
+    protected function _getStartTime()
+    {
+        return $this->started_at->format('G:i');
+    }
+    protected function _getFinishTime()
+    {
+        return date('G:i', strtotime('+' . $this->screening_time . 'minute', strtotime($this->started_at)));
+    }
 }

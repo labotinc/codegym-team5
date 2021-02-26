@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\I18n\Time;
 
 /**
  * Payments Model
@@ -43,7 +44,7 @@ class PaymentsTable extends Table
             'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('ReservationDetail', [
+        $this->belongsTo('ReservationDetails', [
             'foreignKey' => ['member_id', 'schedule_id', 'column_number', 'record_number'],
             'joinType' => 'INNER',
         ]);
@@ -118,5 +119,65 @@ class PaymentsTable extends Table
         $rules->add($rules->existsIn(['creditcard_id'], 'Creditcards'));
 
         return $rules;
+    }
+    public function insert($entity)
+    { //saveの仕様が「レコードが存在する場合はupdateする」なので一意でない時はfalseを返すよう変更
+        $columnNumber = $entity['column_number'];
+        $recordNumber = $entity['record_number'];
+        if ($this->exists(['column_number' => $columnNumber, 'record_number' => $recordNumber])) {
+            return false;
+        }
+        return $this->save($entity);
+    }
+    public function findReservedLists(Query $query, array $options)
+    {
+        $memberId = $options['memberId'];
+        $today = Time::now();
+
+        return $query
+            ->contain('Schedules', function ($q) {
+                return $q->contain('Movies');
+            })
+            ->contain('ReservationDetails')
+            ->select([
+                'Schedules.start_date',
+                'ReservationDetails.discount_id',
+                'Movies.picture_name',
+                'Movies.name',
+                'Movies.screening_time',
+                'schedule_id',
+                'column_number',
+                'record_number',
+                'purchase_price',
+            ])
+            ->where([
+                'Payments.member_id' => $memberId,
+                'Payments.is_cancelled' => 0,
+                'Schedules.start_date >' => $today,
+                'Schedules.is_deleted' => 0
+            ])
+            ->order([
+                'Schedules.start_date' => 'DESC',
+                'Payments.schedule_id' => 'ASC',
+                'Payments.column_number' => 'ASC',
+                'Payments.record_number' => 'ASC',
+            ])
+            ->toArray();
+    }
+
+    public function findApplyEntity(Query $query, array $options)
+    {
+        $mainKey = $options['mainKey'];
+
+        return $query
+            ->where($mainKey)
+            ->select([
+                'member_id',
+                'schedule_id',
+                'column_number',
+                'record_number',
+                'is_cancelled',
+            ])
+            ->toArray();
     }
 }
