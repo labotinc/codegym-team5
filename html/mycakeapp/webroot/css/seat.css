@@ -21,7 +21,7 @@
 }
 .seat_select li {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(13, 1fr);
     grid-gap: 4px;
     text-align: center;
     margin-bottom: 10px;
@@ -63,8 +63,16 @@
 .seat_select label:not(.selected):hover::before {
     background-color: #909090;
 }
+.seat_select label.reserved:hover::before {
+    background-color: black;
+    cursor: default;
+}
 button[type="submit"]:disabled {
     background-color: gray;
+}
+button:disabled {
+    cursor: default;
+    box-shadow: none;
 }
 div.content {
     padding-top: 30px;

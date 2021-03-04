@@ -1,14 +1,10 @@
 <?= $this->HTML->css('seat') ?>
-<?php
-$startdate = $seatDetails['start_date'];
-$finishdate = date('G:i', strtotime('+' . $seatDetails['movie']['screening_time'] . 'minute', strtotime($startdate)));
-?>
 <script>
     let Reserved = JSON.parse('<?= json_encode($Reserved); ?>'); //JSの変数定義にPHP直接出力
 </script>
 <div class="seat_heading">
     <h1><?= $seatDetails['movie']['name']; ?></h1>
-    <h2><?= $startdate->format('m月d日 G:i') ?>〜<span><?= $finishdate ?></span></h2>
+    <h2><?= $startdate ?>〜<span><?= $finishdate ?></span></h2>
 </div><!-- /.seat_heading -->
 <?= $this->Form->create(); ?>
 <div class="seat_select">

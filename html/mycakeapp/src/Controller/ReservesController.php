@@ -54,8 +54,28 @@ class ReservesController extends AppController
             }
             $this->request->session()->delete('seat');
         }
+        //席予約情報を取得
+        $seatReservations = $this->SeatReservations->find()
+            ->where(['schedule_id' => $_SESSION['schedule_id']])
+            ->andWhere(['is_cancelled' => 0]);
+        foreach ($seatReservations as $seatReservation) {
+            $Reserved[] = $seatReservation['column_number'] . '-' . $seatReservation['record_number'];
+        }
+        //予約済み情報を取得
+        $Reservations = $this->ReservationDetails->find()
+            ->where(['schedule_id' => $_SESSION['schedule_id']])
+            ->andWhere(['is_cancelled' => 0]);
+        foreach ($Reservations as $Reservation) {
+            $Reserved[] = $Reservation['column_number'] . '-' . $Reservation['record_number'];
+        }
+        if (isset($Reserved)) {
+            $this->set(compact('Reserved'));
+        }
         if ($this->request->isPost()) {
             $seatNumber = explode("-", $_POST['seat']);
+            if (in_array($_POST['seat'], $Reserved)) {
+                return $this->redirect(['controller' => 'error']);
+            }
             $entity = $this->SeatReservations->newEntity();
             $entity['member_id'] = $this->Auth->user('id');
             $entity['schedule_id'] = $_SESSION['schedule_id'];
@@ -74,24 +94,12 @@ class ReservesController extends AppController
         $seatDetails = $this->Schedules->get($_SESSION['schedule_id'], [
             'contain' => ['Movies', 'Theaters']
         ]);
-        //２時間前までの席予約情報を取得
-        $seatReservations = $this->SeatReservations->find()
-            ->where(['schedule_id' => $_SESSION['schedule_id']])
-            ->andWhere(['is_cancelled' => 0])
-            ->andWhere(['created_at >=' => new Time('2 hours ago')]);
-        foreach ($seatReservations as $seatReservation) {
-            $Reserved[] = $seatReservation['column_number'] . '-' . $seatReservation['record_number'];
-        }
-        //予約済み情報を取得
-        $Reservations = $this->ReservationDetails->find()
-            ->where(['schedule_id' => $_SESSION['schedule_id']])
-            ->andWhere(['is_cancelled' => 0]);
-        foreach ($Reservations as $Resavation) {
-            $Resaveted[] = $Resavation['column_number'] . '-' . $Resavation['record_number'];
-        }
         $this->viewBuilder()->setLayout('frame-title');
         $title = '座席指定';
-        $this->set(compact('title', 'seatDetails', 'Reserved'));
+        $week = ['日', '月', '火', '水', '木', '金', '土'];
+        $startdate = $seatDetails['start_date']->format('m月d日　G:i') . '(' . $week[$seatDetails['start_date']->format('w')] . ')';
+        $finishdate = date('G:i', strtotime('+' . $seatDetails['movie']['screening_time'] . 'minute', strtotime($startdate)));
+        $this->set(compact('title', 'seatDetails', 'startdate', 'finishdate'));
     }
 
     public function ticket()

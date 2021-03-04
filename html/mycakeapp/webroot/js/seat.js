@@ -3,7 +3,6 @@ $(document).ready(function(){
     //予約済みのbutonにdisabled属性を追加
     if(typeof Reserved != 'undefined'){
         for(var i = 0; i < Object.keys(Reserved).length; i++){
-            console.log(Reserved);
             $('#' + Reserved[i]).prop('disabled', true);
             $('label[for=' + Reserved[i] + ']').addClass('reserved');
         }
