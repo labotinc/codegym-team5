@@ -73,7 +73,7 @@ class ReservesController extends AppController
         }
         if ($this->request->isPost()) {
             $seatNumber = explode("-", $_POST['seat']);
-            if (in_array($_POST['seat'], $Reserved)) {
+            if (!empty($Reserved) && in_array($_POST['seat'], $Reserved)) {
                 return $this->redirect(['controller' => 'error']);
             }
             $entity = $this->SeatReservations->newEntity();
