@@ -322,8 +322,6 @@ class ReservesController extends AppController
     }
     public function payment()
     {
-        var_dump($_SESSION['payment']['column_number']);
-        var_dump($_SESSION['payment']['record_number']);
         $this->viewBuilder()->setLayout('frame-title');
         $title = '決済方法';
         $memberId = $this->Auth->user('id');
