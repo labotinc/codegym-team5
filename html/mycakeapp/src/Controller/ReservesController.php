@@ -81,6 +81,7 @@ class ReservesController extends AppController
             $entity['schedule_id'] = $_SESSION['schedule_id'];
             $entity['column_number'] = $seatNumber[0];
             $entity['record_number'] = $seatNumber[1];
+            $entity['is_cancelled'] = 0;
             if ($this->SeatReservations->save($entity)) {
                 $_SESSION['seat']['member_id'] = $this->Auth->user('id');
                 $_SESSION['seat']['schedule_id'] = $_SESSION['schedule_id'];
@@ -98,7 +99,7 @@ class ReservesController extends AppController
         $title = '座席指定';
         $week = ['日', '月', '火', '水', '木', '金', '土'];
         $startdate = $seatDetails['start_date']->format('m月d日　G:i') . '(' . $week[$seatDetails['start_date']->format('w')] . ')';
-        $finishdate = date('G:i', strtotime('+' . $seatDetails['movie']['screening_time'] . 'minute', strtotime($startdate)));
+        $finishdate = date('G:i', strtotime('+' . $seatDetails['movie']['screening_time'] . 'minute', strtotime($seatDetails['start_date'])));
         $this->set(compact('title', 'seatDetails', 'startdate', 'finishdate'));
     }
 
