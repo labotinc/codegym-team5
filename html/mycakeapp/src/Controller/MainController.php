@@ -24,7 +24,9 @@ class MainController extends AppController
   {
     $this->viewBuilder()->setLayout('no-frame');
     if ($id) { //予約購入ボタンを押した場合
-      session_start();
+      if (!isset($_SESSION)) {
+        session_start();
+      }
       $_SESSION['schedule_id'] = $id;
       return $this->redirect(['controller' => 'reserves', 'action' => 'seat']);
     }

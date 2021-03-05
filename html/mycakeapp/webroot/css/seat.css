@@ -1,0 +1,80 @@
+.seat_heading {
+    color: #707070;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.seat_heading h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.seat_heading h2 {
+    font-size: 18px;
+}
+.seat_heading span {
+    font-size: 14px;
+}
+.seat_select {
+    width: 496px;
+    margin: 0 auto;
+    color: #707070;
+    margin-bottom: 50px;
+}
+.seat_select li {
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    grid-gap: 4px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.seat_select p {
+    font-size: 13px;
+    line-height: 24px;
+    width: 24px;
+}
+.seat_select input[type="checkbox"] {
+    height: 24px;
+    width: 24px;
+    display: none;
+}
+.seat_select label {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    position: relative;
+}
+.seat_select label::before {
+    background-color: #707070;
+    content: "";
+    display: block;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+}
+.seat_select .reserved::before {
+    background-color: black;
+    content: "×";
+    color: white;
+    line-height: 24px;
+}
+.seat_select .selected::before {
+    background-color: #ffcc00;
+}
+.seat_select label:not(.selected):hover::before {
+    background-color: #909090;
+}
+.seat_select label.reserved:hover::before {
+    background-color: black;
+    cursor: default;
+}
+button[type="submit"]:disabled {
+    background-color: gray;
+}
+button:disabled {
+    cursor: default;
+    box-shadow: none;
+}
+div.content {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}

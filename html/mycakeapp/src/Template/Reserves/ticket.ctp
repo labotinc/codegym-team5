@@ -16,7 +16,7 @@
 <?php endif; ?>
 <div class="half-button">
   <?php
-  echo $this->Form->button('戻る', ['onclick' => 'history.back()', 'class' => 'button back-gray', 'type' => 'button']);
+  echo $this->Html->link('戻る', ['action' => 'seat'], ['class' => 'button back-gray']);
   echo $this->Form->button('次へ', ['class' => 'button back-orange']);
   ?>
 </div>
