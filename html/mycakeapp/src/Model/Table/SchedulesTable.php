@@ -116,6 +116,7 @@ class SchedulesTable extends Table
                 'Movies.name',
                 'Movies.started_at',
                 'Movies.screening_time',
+                'Schedules.start_date',
             ])->where(['Schedules.id' => $options['schedule_id']])->first();
     }
 }
