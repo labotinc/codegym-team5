@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
@@ -46,4 +47,21 @@ class Schedule extends Entity
         'reservation_details' => true,
         'seat_reservations' => true,
     ];
+    protected function _getDate()
+    {
+        return $this->start_date->format('n月j日');
+    }
+    protected function _getWeek()
+    {
+        $week = ['日', '月', '火', '水', '木', '金', '土'];
+        return $week[$this->start_date->format('w')];
+    }
+    protected function _getStartTime()
+    {
+        return $this->start_date->format('G:i');
+    }
+    protected function _getFinishTime()
+    {
+        return date('G:i', strtotime('+' . $this->movie->screening_time . 'minute', strtotime($this->start_date)));
+    }
 }

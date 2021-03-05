@@ -116,7 +116,7 @@ class DiscountsTable extends Table
         $useDiscountSql = $query
             ->select(['displayed_amount', 'name', 'is_minus'])
             ->where([
-                'id' => $_SESSION['discount_id'],
+                'id' => $_SESSION['payment']['discount_id'],
                 'started_at <=' => $options['start_date'],
                 'OR' => [['finished_at >=' => $options['start_date']], ['finished_at IS NULL']],
                 'is_deleted' => 0,
